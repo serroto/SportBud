@@ -1,0 +1,68 @@
+:root {
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body{
+    margin: 0;
+}
+
+.cover{
+    position: relative;
+    background-image: url("src/assets/sportbud_cover.png");
+    background-size: cover;
+    color: #fff;
+    height: 100vh;
+    padding: 8px;
+}
+
+.cover-nav{
+    position: sticky;
+    padding: 15px;
+    height: 50px;
+    margin: 0px;
+}
+
+.nav-link{
+    text-decoration: none;
+    color: #fff;
+    margin-right: 30px;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.nav-link:hover{
+    color: #ccff00;
+}
+
+.logo{
+    text-align: left;
+    float: left;
+    margin-left: 15px;
+    width: 80px;
+    height: 50px;
+}
+
+.register{
+    float: right;
+}
+
+.bottom-text{
+    position: absolute;
+    top: 480px;
+    left: 30px;
+    
+}
+
+.bottom-text h1{
+    font-family: 'Prompt', sans-serif;
+    font-weight: 700;
+    font-size: 80px;
+    font-stretch: expanded;
+    margin: 0 auto;
+}
+
+.bottom-text span{
+    color: #ccff00;
+    font-size: 18px;
+    margin-right: 55px;
+}
