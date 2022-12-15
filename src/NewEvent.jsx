@@ -1,10 +1,17 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import React, { useState } from "react";
 import { useRef, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import { TimePicker } from 'antd';
+import dayjs from 'dayjs';
 
 export default function NewEvent(){
     const [selectedImage, setSelectedImage] = useState(null);
     const oldRoomPic = useRef();
+    const [startDate, setStartDate] = useState(new Date());
+    const format = 'HH:mm';
+
     return(
         <div className="create-new-event">
             <nav className='new-event-nav'>
@@ -17,25 +24,16 @@ export default function NewEvent(){
 
             <div className='filters-gray'>
                 
-            <div className="dropdown dropdown-gray">
-            <i className="bi bi-clock clock-icon"></i>
-            <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Place</button>
-            <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#">Dropdown item</a></li>
-            </ul>
-            </div>
-            <div className="dropdown dropdown-gray side-by-side">
+            <div className="maps-gray">
             <i className="bi bi-geo-alt pin-icon"></i>
-            <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Date</button>
-            <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#">Dropdown item</a></li>
-            </ul>
+            {/* <span>Choose Location</span> */}
+            <div id='map-itself'></div>
+            
             </div>
-            <div className="dropdown dropdown-gray side-by-side">
-            <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Time</button>
-            <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#">Dropdown item</a></li>
-            </ul>
+            <div className='date-filter-gray'>
+            <i className="bi bi-calendar-check calendar-icon"></i>
+            <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className="date-picker"/>
+            <TimePicker defaultValue={dayjs('13:30', format)} format={format} className="time-picker"/>
             </div>
 
             <div className='room-capacity'>
@@ -73,7 +71,7 @@ export default function NewEvent(){
             <div>
             <img alt="not fount" width={"160px"} height={"120px"} src={URL.createObjectURL(selectedImage)} />
             <br />
-            <button onClick={()=>setSelectedImage(null)}>Remove</button>
+            <button onClick={()=>setSelectedImage(null)} className="remove-btn">Remove</button>
             </div>
              )}
              <input
@@ -86,7 +84,7 @@ export default function NewEvent(){
             }}
             ref={oldRoomPic}
             />
-                <img src="src/assets/yoga-room-pic.png" alt="" onClick={()=> {const oldPic = oldRoomPic.current; oldPic.click(); current.classList.add("hide")} }/>
+                <img src="src/assets/yoga-room-pic.png" alt="" className='yoga-room-pic' onClick={(event)=> {const oldPic = oldRoomPic.current; oldPic.click(); event.currentTarget.classList.add("hide")} }/>
                 <div>
                 <p>Yaşam Parkı</p>
                 <p><i className="bi bi-geo-alt pin-icon white-icon"></i> 4 KM</p>
@@ -94,7 +92,6 @@ export default function NewEvent(){
                 </div>
             </div>
             </div>
-
         </div>
     );
 }

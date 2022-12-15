@@ -573,7 +573,7 @@ video{
     flex-direction: column;
 }
 
-.new-event-result-box img{
+.yoga-room-pic{
     width: 160px;
     height: 120px;
     margin: 25px;
@@ -584,8 +584,8 @@ video{
 }
 
 .new-event-result-box div{
-    margin: 33px;
-    margin-top: 45px;
+    margin: auto;
+    /* margin-top: 45px; */
     
 }
 
@@ -738,6 +738,57 @@ video{
 
 .hide{
     display: none;
+}
+
+.remove-btn{
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px;
+    margin-top: 30px;
+    border-radius: 5px;
+}
+.date-filter-gray{
+    display: flex;
+    flex-direction: row;
+}
+.date-picker{
+    width: 110px;
+    border: 1px solid #e0e0e0;
+    font-size: 14px;
+    border-radius: 6px;
+    margin-left: 30px;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.react-datepicker__current-month{
+    font-weight: 500!important;
+}
+.react-datepicker__day--selected{
+    background-color: #e6f4ff!important;
+    color: #323232!important;
+    font-weight: 550;
+}
+.react-datepicker__day--today{
+    font-weight: normal!important;
+}
+.react-datepicker-wrapper{
+    width:150px!important;
+}
+
+.time-packer{
+    padding: 3px!important;
+    border: 1px solid #e0e0e0!important;
+}
+
+.calendar-icon{
+    margin-left: 14px;
+    font-size: 1.2rem;
+}
+
+.map-container{
+    width: 400px;
 }
 
 /* Room Page CSS */
