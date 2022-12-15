@@ -1,31 +1,79 @@
 import { Link } from 'react-router-dom'
+import React, { useState } from "react";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import { TimePicker } from 'antd';
+import dayjs from 'dayjs';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import {
+    geocodeByAddress,
+    geocodeByPlaceId,
+    getLatLng,
+  } from 'react-places-autocomplete';
 
 export default function Branch(){
+    const [startDate, setStartDate] = useState(new Date());
+    const format = 'HH:mm';
+    const[address,setAdress] = useState();
+    const [coordinates, setCoordinates] = useState({
+        lat:null,
+        lng:null
+    })
+    const handleSelect = async value=>{
+        const results = await geocodeByAddress(value);
+        const ll = await getLatLng(results[0])
+        // you can pass ll
+        setAdress(value)
+        setCoordinates(ll)
+    }
     return (
         <div className='branch'>
             <nav className='branch-nav'>
           <Link to="/"><img src="src/assets/sportbud_logo_dark.png" alt="logo" className='dark-logo'/></Link>
 
           <div className='filters-yellow'>
-            <div className="dropdown dropdown-yellow">
-            <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Date</button>
-            <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#">Dropdown item</a></li>
-            </ul>
+          <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className="date-picker-yellow"/>
+          <TimePicker placeholder='Time' format={format} className="time-picker-yellow"/>
+          <PlacesAutocomplete
+        value={address}
+        onChange={setAdress}
+        onSelect={handleSelect}
+        className="location-picker-yellow"
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div key={suggestions.description}>
+            <input
+              {...getInputProps({
+                placeholder: 'Place',
+                className: 'location-search-input-yellow',
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading..</div>}
+              {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                );
+              })}
             </div>
-            <div className="dropdown dropdown-yellow">
-            <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Time</button>
-            <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#">Dropdown item</a></li>
-            </ul>
-            </div>
-            <div className="dropdown dropdown-yellow">
-            <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Place</button>
-            <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#">Dropdown item</a></li>
-            </ul>
-            </div>
-            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
+          </div>
             </nav>
 
             <div className='search-bar'>
