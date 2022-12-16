@@ -285,7 +285,7 @@ video{
     background: linear-gradient(
     to right,
     #293038 0%,
-    #293038 40%,
+    #293038 35%,
     #f3f5f6 0%,
     #f3f5f6 100%
   );
@@ -383,7 +383,7 @@ video{
     width: 350px;
 }
 
-.welcome-map{
+.welcome-map-pic{
     float: right;
     width: 695px;
     height: 450px;
@@ -486,6 +486,13 @@ video{
     margin-left: 23px;
 }
 
+.Map{
+    float: right;
+    margin-right: 40px;
+    border-radius: 5px;
+}
+
+
 
 /* Branch Page CSS */
 
@@ -522,11 +529,8 @@ video{
 .branch-map{
     position:absolute;
     top: 199px;
-    right: 2px;
+    right: 5px;
     float: right;
-    width: 695px;
-    height: 450px;
-    margin-right: 58px;
     border-radius: 5px;
 }
 

@@ -11,6 +11,9 @@ import {
     getLatLng,
   } from 'react-places-autocomplete';
 
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+const defaultLocation = { lat: 38.463489, lng: 27.207897 };    
+
 export default function Branch(){
     const [startDate, setStartDate] = useState(new Date());
     const format = 'HH:mm';
@@ -116,8 +119,35 @@ export default function Branch(){
                 </Link>
             </div>
 
-            <div className='Map'>
-                <img src="src/assets/welcome-map-google.png" alt="map" className='branch-map'/>
+            <div className='Map branch-map'>
+                {/* <img src="src/assets/welcome-map-google.png" alt="map" className='branch-map'/> */}
+                <GoogleMap
+          className="google-map-welcome"
+            center={defaultLocation}
+            zoom={15}
+            options={{ mapId: '4b98d7147a6f0c97' }}
+            mapContainerStyle={{ height: '500px', width: '760px'}}
+          >
+            <Marker
+              position={{ lat: 38.466740652105116, lng: 27.20658485206456 }}
+              icon = {{
+                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+              }}
+            />
+             <Marker
+              position={{ lat: 38.46367189173037, lng: 27.206902745666373 }}
+              icon = {{
+                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+              }}
+            />
+            <Marker
+              position={ {lat: 38.462318648498844, lng: 27.203603032410086} }
+              icon = {{
+                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+              }}
+            />
+            
+          </GoogleMap>
             </div>
         </div>
     )

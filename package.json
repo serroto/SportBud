@@ -18,6 +18,7 @@
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
     "react-element-to-jsx-string": "^15.0.0",
+    "react-google-maps": "^9.4.5",
     "react-places-autocomplete": "^7.3.0",
     "react-router-dom": "^6.4.3"
   },
