@@ -13,6 +13,7 @@ import {
   } from 'react-places-autocomplete';
 
 import reactElementToJSXString from 'react-element-to-jsx-string';
+import { useNavigate } from 'react-router-dom';
 
 export default function NewEvent(){
     const [selectedImage, setSelectedImage] = useState(null);
@@ -40,6 +41,15 @@ export default function NewEvent(){
     }
 
     const [title, setTitle] = useState('');
+    const [capacity, setCapacity] = useState('');
+    const [slogan, setSlogan] = useState('');
+
+
+    const navigate = useNavigate();
+    const toNewRoom=()=>{
+      navigate('/newroom',{state:{name:title, place:address, time: JSON.stringify(eventDate), capacity: capacity, slogan:slogan}});
+        }
+
     return(
         <div className="create-new-event">
             <nav className='new-event-nav'>
@@ -102,7 +112,7 @@ export default function NewEvent(){
 
             <div className='room-capacity'>
             <i className="bi bi-people people-icon"></i>
-            <span>Room's Capacity</span> <input type="number" id="capacity-ctr" min="3" max="12" placeholder='3'></input>
+            <span>Room's Capacity</span> <input type="number" id="capacity-ctr" min="3" max="12" placeholder='3' onChange={event => setCapacity(event.target.value)}></input>
             </div>
 
             <div className='branch-selection'>
@@ -121,10 +131,10 @@ export default function NewEvent(){
             </div>
 
             <div className='room-slogan'>
-            <span>Room's Slogan</span> <input placeholder='Enter slogan'></input>
+            <span>Room's Slogan</span> <input placeholder='Enter slogan' onChange={event => setSlogan(event.target.value)}></input>
             </div>
 
-            <button className='create-room-btn'>Create Room</button>
+            <button className='create-room-btn' onClick={()=>{toNewRoom()}}>Create Room</button>
             
             </div>
             </div>

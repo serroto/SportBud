@@ -7,6 +7,7 @@ import Welcome from './Welcome.jsx'
 import Branch from './Branch.jsx'
 import NewEvent from "./NewEvent.jsx";
 import Room from './Room.jsx'
+import NewRoom from './NewRoom.jsx'
 import Profile from './Profile.jsx'
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
         <Route exact path="branch" element={<Branch />} />
         <Route exact path="newevent" element={<NewEvent />} />
         <Route exact path="room" element={<Room />} />
+        <Route exact path="newroom" element={<NewRoom />} />
         <Route exact path="profile" element={<Profile />} />
       </Routes>
   )
