@@ -501,7 +501,7 @@ video{
     background: linear-gradient(
     to right,
     #f3f5f6 0%,
-    #f3f5f6 40%,
+    #f3f5f6 35%,
     #293038 0%,
     #293038 100%
   );
@@ -529,7 +529,7 @@ video{
 .branch-map{
     position:absolute;
     top: 199px;
-    right: 5px;
+    right: 4px;
     float: right;
     border-radius: 5px;
 }
