@@ -22,7 +22,7 @@ export default function Room(){
                 </div>
             </div>
             <div className='chat'>
-                <img src="src/assets/chat.png" alt="" className='chat-img'/>
+                <img src="src/assets/new-chat.png" alt="" className='chat-img'/>
             </div>
           </div>
         </div>

@@ -284,8 +284,8 @@ video{
     height: 100vh;
     background: linear-gradient(
     to right,
-    #434343 0%,
-    #434343 40%,
+    #293038 0%,
+    #293038 40%,
     #f3f5f6 0%,
     #f3f5f6 100%
   );
@@ -385,11 +385,10 @@ video{
 
 .welcome-map{
     float: right;
-    width: 690px;
-    height: 430px;
+    width: 695px;
+    height: 450px;
     margin-right: 60px;
     border-radius: 5px;
-    border: 5px solid #595959;
 }
 
 .cat-box-img img{
@@ -496,8 +495,8 @@ video{
     to right,
     #f3f5f6 0%,
     #f3f5f6 40%,
-    #434343 0%,
-    #434343 100%
+    #293038 0%,
+    #293038 100%
   );
 }
 
@@ -521,12 +520,14 @@ video{
 }
 
 .branch-map{
+    position:absolute;
+    top: 199px;
+    right: 2px;
     float: right;
-    width: 690px;
-    height: 430px;
-    margin-right: 60px;
+    width: 695px;
+    height: 450px;
+    margin-right: 58px;
     border-radius: 5px;
-    border: 5px solid #cecece;
 }
 
 .plus-icon{
@@ -581,7 +582,7 @@ video{
 
 /* Create New Event Page CSS */
 .create-new-event{
-    background-color: #434343;
+    background-color: #293038;
     height: 100vh;
 }
 
@@ -779,7 +780,7 @@ video{
 }
 
 .create-room-btn{
-    background-color: #434343!important;
+    background-color: #293038!important;
     color: #f3f5f6!important;
     float: right;
     margin: 30px;
@@ -941,11 +942,11 @@ video{
 }
 
 .chat-img{
-    border-radius: 6%;
+    /* border-radius: 6%; */
     width: 550px;
     position: fixed;
     top: 150px;
-    right: 70px;
+    right: 150px;
 }
 
 .carousel a{

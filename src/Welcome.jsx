@@ -118,7 +118,7 @@ export default function Welcome(){
             </div>
 
             <div className='Map'>
-                <img src="src/assets/welcome-map.png" alt="map" className='welcome-map'/>
+                <img src="src/assets/welcome-map-google.png" alt="map" className='welcome-map'/>
             </div>
         </div>
     )

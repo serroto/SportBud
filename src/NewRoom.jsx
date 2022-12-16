@@ -17,13 +17,13 @@ export default function NewRoom(){
                 </div>
                 <div className='room-info-bottom'>
                     <p><b>{newInput.state.slogan}</b></p>
-                    <p>Room admin <span className='darker'>@serratalay</span></p>
+                    <p>Room admin <span className='darker'>@SERRATALAY</span></p>
                     <p>This room's capacity is <span className='darker'>{newInput.state.capacity} people.</span></p>
                     <button className='mail-button'>Join the Room</button>
                 </div>
             </div>
             <div className='chat'>
-                <img src="src/assets/chat.png" alt="" className='chat-img'/>
+                <img src="src/assets/new-chat.png" alt="" className='chat-img'/>
             </div>
           </div>
         </div>

@@ -117,7 +117,7 @@ export default function Branch(){
             </div>
 
             <div className='Map'>
-                <img src="src/assets/branch-map.png" alt="map" className='branch-map'/>
+                <img src="src/assets/welcome-map-google.png" alt="map" className='branch-map'/>
             </div>
         </div>
     )
