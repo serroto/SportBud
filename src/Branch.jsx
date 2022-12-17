@@ -33,8 +33,19 @@ export default function Branch(){
         <div className='branch'>
             <nav className='branch-nav'>
           <Link to="/"><img src="src/assets/sportbud_logo_dark.png" alt="logo" className='dark-logo'/></Link>
+          <span className='nav-links light'>
+            <Link to="/welcome">Home</Link>
+            <Link to="/profile">Profile</Link>
+          </span>
+            </nav>
 
-          <div className='filters-yellow'>
+            <div className='search-bar'>
+            <input type="text" placeholder="Cardio"/> <span className='search-icon-box'><i className="bi bi-search"/></span>
+            </div>
+
+            <div className='branch-description'><span>Branch Info:</span> Cardio is defined as any type of exercise that gets your heart rate up and keeps it up for a prolonged period of time.</div>
+
+            <div className='filters-yellow filters-yellow-branch'>
           <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className="date-picker-yellow"/>
           <TimePicker placeholder='Time' format={format} className="time-picker-yellow"/>
           <PlacesAutocomplete
@@ -77,13 +88,6 @@ export default function Branch(){
         )}
       </PlacesAutocomplete>
           </div>
-            </nav>
-
-            <div className='search-bar'>
-            <input type="text" placeholder="Cardio"/> <span className='search-icon-box'><i className="bi bi-search"/></span>
-            </div>
-
-            <div className='branch-description'><span>Branch Info:</span> Cardio is defined as any type of exercise that gets your heart rate up and keeps it up for a prolonged period of time.</div>
 
             <div className='branch-rooms carousel'>
                 <div className='branch-box'>

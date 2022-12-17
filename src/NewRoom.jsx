@@ -7,6 +7,10 @@ export default function NewRoom(){
         <div className="activity-room">
           <nav className='activity-room-nav'>
           <Link to="/"><img src="src/assets/sportbud_logo_dark.png" alt="logo" className='dark-logo'/></Link>
+          <span className='nav-links'>
+            <Link to="/welcome">Home</Link>
+            <Link to="/profile">Profile</Link>
+          </span>
           </nav>
           <div>
             <div className='room-info'>

@@ -52,8 +52,13 @@ export default function NewEvent(){
 
     return(
         <div className="create-new-event">
-            <nav className='new-event-nav'>
+          <nav className='new-event-nav'>
           <Link to="/"><img src="src/assets/logo.png" alt="logo" className='logo'/></Link>
+
+          <span className='nav-links light'>
+            <Link to="/welcome">Home</Link>
+            <Link to="/profile">Profile</Link>
+          </span>
           </nav>
 
           <div >

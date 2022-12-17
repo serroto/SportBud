@@ -32,10 +32,36 @@ export default function Welcome(){
 
     return (
         <div className='welcome'>
-            <nav className='welcome-nav'>
+        <nav className='welcome-nav'>
           <Link to="/"><img src="src/assets/logo.png" alt="logo" className='logo'/></Link>
+          <span className='nav-links'>
+            <Link to="/welcome">Home</Link>
+            <Link to="/profile">Profile</Link>
+          </span>
+        </nav>
 
-          <div className='filters-yellow'>
+            <div className='search-bar'>
+            <input type="text" placeholder="Find your branch or room"/> <span className='search-icon-box'><i className="bi bi-search"/></span>
+            </div>
+
+            <div className='carousel'>
+                <h6>Categories</h6>
+                <div className='box'>
+                    <span className='cat-box-img'>
+                        <img src="src/assets/running.png"/>
+                        <img src="src/assets/pilates.png"/>
+                        <Link to="/branch"><img src="src/assets/cardio.png"/></Link>
+                        <img src="src/assets/yoga.png"/>
+                    </span>
+                    <span className='cat-box-text'>
+                        <span>Running</span>
+                        <span>Pilates</span>
+                        <Link to="/branch"><span>Cardio</span></Link>
+                        <span className='extra-margin'>Yoga</span>
+                    </span>
+                </div>
+
+                <div className='filters-yellow'>
           <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className="date-picker-yellow"/>
           <TimePicker placeholder='Time' format={format} className="time-picker-yellow"/>
           <PlacesAutocomplete
@@ -78,28 +104,7 @@ export default function Welcome(){
         )}
       </PlacesAutocomplete>
           </div>
-        </nav>
 
-            <div className='search-bar'>
-            <input type="text" placeholder="Find your branch or room"/> <span className='search-icon-box'><i className="bi bi-search"/></span>
-            </div>
-
-            <div className='carousel'>
-                <h6>Categories</h6>
-                <div className='box'>
-                    <span className='cat-box-img'>
-                        <img src="src/assets/running.png"/>
-                        <img src="src/assets/pilates.png"/>
-                        <Link to="/branch"><img src="src/assets/cardio.png"/></Link>
-                        <img src="src/assets/yoga.png"/>
-                    </span>
-                    <span className='cat-box-text'>
-                        <span>Running</span>
-                        <span>Pilates</span>
-                        <Link to="/branch"><span>Cardio</span></Link>
-                        <span className='extra-margin'>Yoga</span>
-                    </span>
-                </div>
                 <h6>Event Rooms Near You</h6>
                 <div className='near-event-box'>
                     <div className='event-box-text'>
@@ -127,7 +132,7 @@ export default function Welcome(){
             center={defaultLocation}
             zoom={15}
             options={{ mapId: '4b98d7147a6f0c97' }}
-            mapContainerStyle={{ height: '500px', width: '760px'}}
+            mapContainerStyle={{ height: '520px', width: '770px'}}
           >
             <Marker
               position={{ lat: 38.46698426184403, lng: 27.20696036128919 }}
