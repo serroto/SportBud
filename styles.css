@@ -19,6 +19,7 @@ body{
 .cover-nav{
     position: sticky;
     padding: 15px;
+    padding-top: 10px;
     height: 50px;
     margin: 0px;
 }
@@ -293,9 +294,26 @@ video{
 
 .welcome-nav{
     position: sticky;
-    padding: 8px;
+    padding: 14px;
     height: 100px;
     margin: 0px;
+}
+
+.nav-links{
+    float: right;
+    margin-right: 15px;
+    margin-top: 15px;
+}
+.nav-links a{
+    color: #212529;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 550;
+    text-align: right;
+    margin-right: 15px;
+}
+.nav-links a:hover{
+    color: #595959;
 }
 
 .dark-logo{
@@ -305,8 +323,9 @@ video{
 }
 
 .filters-yellow{
-    float: right;
-    margin: 25px;
+    float: left;
+    margin: 50px;
+    margin-left: 0px;
     display: flex;
     flex-direction: row;
 }
@@ -339,7 +358,7 @@ video{
     border: none;
     margin-left: 30px;
     margin-top: 15px;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
     border-radius: 1em 0 0 1em!important;
 }
 
@@ -355,7 +374,18 @@ video{
 
 .carousel{
     margin: 30px;
+    margin-top: 60px;
     float: left;
+}
+
+.branch-rooms{
+    float: none;
+    margin-top: 130px;
+}
+
+.filters-yellow-branch{
+    margin-left: 30px;
+    margin-top: 40px;
 }
 
 .carousel h6{
@@ -365,7 +395,7 @@ video{
 .box{
     padding-top: 10px;
     padding-left: 10px;
-    margin-bottom: 80px;
+    margin-bottom: 20px;
     background-color: #cecece;
     margin-top: 15px;
     border-radius: 10px;
@@ -375,7 +405,6 @@ video{
 
 .near-event-box{
     padding: 10px;
-    margin-bottom: 80px;
     background-color: #cecece;
     margin-top: 15px;
     border-radius: 10px;
@@ -442,7 +471,7 @@ video{
     font-size: 15px;
     font-weight: 450;
     border-radius: 6px;
-    margin-left: 30px;
+    margin-left: 0px;
     margin-right: 30px;
     padding: 5px;
     background-color:#d7fd35;
@@ -488,7 +517,7 @@ video{
 
 .Map{
     float: right;
-    margin-right: 40px;
+    margin-right: 63px;
     border-radius: 5px;
 }
 
@@ -510,12 +539,18 @@ video{
 .branch-nav{
     position: sticky;
     padding: 8px;
+    padding-right: 14px;
     height: 100px;
     margin: 0px;
 }
 
+.light a{
+    color: #e6e6e6;
+}
+
 .branch-description{
     margin-left: 30px;
+    margin-top: 20px;
     font-weight: 500;
     font-size: 14px;
     color: #595959;
@@ -528,7 +563,7 @@ video{
 
 .branch-map{
     position:absolute;
-    top: 199px;
+    top: 170px;
     right: 4px;
     float: right;
     border-radius: 5px;
@@ -566,7 +601,7 @@ video{
 .branch-box{
     padding-top: 10px;
     padding-left: 10px;
-    margin-bottom: 80px;
+    margin-bottom: 40px;
     background-color: #cecece;
     margin-top: 15px;
     border-radius: 10px;
@@ -602,7 +637,7 @@ video{
 .new-event-h{
     margin: 30px;
     margin-top: 10px;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 600;
     color: lightgray;
 }
@@ -837,7 +872,7 @@ video{
     font-weight: normal!important;
 }
 .react-datepicker-wrapper{
-    width:150px!important;
+    width:120px!important;
 }
 
 .time-picker{
@@ -971,20 +1006,21 @@ video{
 
 .profile{
     background-color: #212529;
-    background-image: url("src/assets/profile-page-ss.png");
+    height: 100vh;
+    /* background-image: url('src/assets/profile-pic.png');
     background-repeat: no-repeat;
-    background-size: cover;
-    height: 100vh;
-    width: 100vh;
-    /* height: 100vh;
-    font-size: 15px; */
-}
-.profile img{
-    width: 1450px;
-    height: 100vh;
+    background-size: 50% 100%; */
 }
 
-/* .profile-nav{
+.profile-img{
+    width: 430px;
+    height: 460px;
+    border-radius: 5px;
+    margin-left: 150px;
+    margin-top: 70px;
+}
+
+.profile-nav{
     position: sticky;
     padding: 8px;
     padding-top: 16px;
@@ -992,10 +1028,43 @@ video{
     height: 100px;
     margin: 0px;
 }
+.profile-info{
+    color: #e6e6e6;
+    float: right;
+    margin-right: 80px;
+    margin-top: 78px;
+}
 
-.profile-img img{
-    float: left;
-    width: 500px;
-    height: 100vh;
-} */
+.user-name-title{
+    margin-bottom: 70px;
+}
+.about{
+    margin-bottom: 35px;
+}
+.fav-branches{
+    margin-bottom: 35px;
+}
+
+.user-name-title, .about-title, .fav-branches-title{
+    color: #d7fd35;
+}
+
+.fav-branches img{
+    width: 120px;
+    height: 70px;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-right: 20px;
+}
+
+.ratings-numbers span{
+    margin-right: 49px;
+}
+.ratings-areas span{
+    margin-right: 15px;
+}
+
+.events-created{
+    margin-top: 55px;
+}
 
