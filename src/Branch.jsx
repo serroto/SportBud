@@ -129,7 +129,6 @@ export default function Branch(){
           className="google-map-welcome"
             center={defaultLocation}
             zoom={15}
-            options={{ mapId: '4b98d7147a6f0c97' }}
             mapContainerStyle={{ height: '500px', width: '760px'}}
           >
             <Marker

@@ -15,14 +15,14 @@ export default function NewRoom(){
           <div>
             <div className='room-info'>
                 <div className='room-info-upper'>
-                <p>{newInput.state.name}</p>
-                <p><i className="bi bi-geo-alt-fill white-icon"></i> {newInput.state.place}</p>
-                <p><i className="bi bi-clock-fill white-icon"></i> {newInput.state.time} </p>
+                <p className='passed-name'>{newInput.state.name}</p>
+                <p className='passed-place'><i className="bi bi-geo-alt-fill white-icon"></i> {newInput.state.place}</p>
+                <p className='passed-time'><i className="bi bi-clock-fill white-icon"></i> {newInput.state.time} </p>
                 </div>
                 <div className='room-info-bottom'>
                     <p><b>{newInput.state.slogan}</b></p>
                     <p>Room admin <span className='darker'><Link to="/profile">@SERRATALAY</Link></span></p>
-                    <p>This room's capacity is <span className='darker'>{newInput.state.capacity} people.</span></p>
+                    <p className='passed-capacity'>This room's capacity is <span className='darker'>{newInput.state.capacity} people.</span></p>
                     <button className='mail-button'>Join the Room</button>
                 </div>
             </div>

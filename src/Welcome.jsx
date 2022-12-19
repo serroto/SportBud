@@ -131,14 +131,15 @@ export default function Welcome(){
           className="google-map-welcome"
             center={defaultLocation}
             zoom={15}
-            options={{ mapId: '4b98d7147a6f0c97' }}
             mapContainerStyle={{ height: '520px', width: '770px'}}
           >
             <Marker
               position={{ lat: 38.46698426184403, lng: 27.20696036128919 }}
               icon = {{
+                // url: "src/assets/yoga-pin.png"
                 url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
               }}
+              // className="Marker"
             />
             <Marker
               position={{ lat: 38.466740652105116, lng: 27.20658485206456 }}

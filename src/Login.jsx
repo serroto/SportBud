@@ -1,11 +1,10 @@
-
 import React, { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import videoBg from './assets/running_video.mp4'
+import videoBg from './assets/running_video.mp4';
 
 export default function Login() {
 

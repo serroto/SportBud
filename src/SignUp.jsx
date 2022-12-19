@@ -91,7 +91,7 @@ export default function SignUp() {
 
         <Button block size="lg" type="submit" disabled={!validateForm()} className="signup-form-button">
 
-          Sign Up
+          <Link to="/Login">Sign Up</Link>
 
         </Button>
 

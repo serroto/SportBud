@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Cover from './Cover.jsx'
 import Login from './Login.jsx'
 import SignUp from './SignUp.jsx'
@@ -12,7 +12,7 @@ import Profile from './Profile.jsx'
 
 export default function App() {
   return (
-    <Routes>
+    <Routes> 
         <Route exact path="/" element={<Cover />} />
         <Route exact path="login" element={<Login />} />
         <Route exact path="signup" element={<SignUp />} />
@@ -22,7 +22,7 @@ export default function App() {
         <Route exact path="room" element={<Room />} />
         <Route exact path="newroom" element={<NewRoom />} />
         <Route exact path="profile" element={<Profile />} />
-      </Routes>
+    </Routes>
   )
 }
 

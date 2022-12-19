@@ -257,15 +257,18 @@ video{
     width: 130px;
     margin-top: 10px;
     margin-bottom: 13px;
-
     background-color: transparent!important;
     opacity:inherit!important;
 }
-
 .signup-form-button:enabled{
     color: #d7fd35;
     background-color: transparent;
     border: none;
+}
+
+.signup-form-button a{
+    text-decoration: none;
+    color: white;
 }
 
 .signup-bottom-text{
@@ -521,6 +524,10 @@ video{
     border-radius: 5px;
 }
 
+/* .gm style .Marker img{
+    width: 30px!important;
+    height: 25px!important;
+} */
 
 
 /* Branch Page CSS */
@@ -725,6 +732,10 @@ video{
     color: rgb(44, 44, 44);
 }
 
+.filters-gray .time-picker{
+    margin-left: 30px;
+}
+
 .side-by-side{
     display: inline;
 }
@@ -778,19 +789,20 @@ video{
     position: absolute;
     right: 70px;
     top: 9px;
-    margin-left: 20px;
     width: 150px;
     overflow-x: auto;
     white-space: nowrap;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 550;
-    padding: 5px;
     border-radius: 5px;
     background-color: #f3f5f6;
 }
 
-.branch-scroll span{
+.branch-scroll button{
     margin-right: 7px;
+    background-color: transparent;
+    margin-left: 0px;
+    padding-right: 0px;
 }
 
 .phone-running{

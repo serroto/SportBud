@@ -124,10 +124,10 @@ export default function NewEvent(){
             <img src="src/assets/phone-running.png" alt="" className='phone-running'/>
             <span>Room's Branch</span> 
             <div className='branch-scroll'>
-                <span>Running</span>
-                <span>Pilates</span>
-                <span>Cardio</span>
-                <span>Yoga</span>
+                <button>Running</button>
+                <button>Pilates</button>
+                <button>Cardio</button>
+                <button>Yoga</button>
                 </div>
             </div>
 
