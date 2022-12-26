@@ -1,9 +1,11 @@
 import { Link, useLocation } from 'react-router-dom'
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import { useRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { TimePicker } from 'antd';
+import moment from 'moment';
 import dayjs from 'dayjs';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
@@ -12,7 +14,6 @@ import {
     getLatLng,
   } from 'react-places-autocomplete';
 
-import reactElementToJSXString from 'react-element-to-jsx-string';
 import { useNavigate } from 'react-router-dom';
 
 export default function NewEvent(){
@@ -35,10 +36,7 @@ export default function NewEvent(){
     }
 
     const [eventDate, setEventDate] = useState();
-
-    const setEventDateF = async value=>{
-        setEventDate(value);
-    }
+    const [eventTime, setEventTime] = useState();
 
     const [title, setTitle] = useState('');
     const [capacity, setCapacity] = useState('');
@@ -47,7 +45,7 @@ export default function NewEvent(){
 
     const navigate = useNavigate();
     const toNewRoom=()=>{
-      navigate('/newroom',{state:{name:title, place:address, time: JSON.stringify(eventDate), capacity: capacity, slogan:slogan}});
+      navigate('/newroom',{state:{name:title, place:address, date: eventDate, /*time:moment(eventTime).format('LT'),*/ capacity: capacity, slogan:slogan}});
         }
 
     return(
@@ -111,8 +109,8 @@ export default function NewEvent(){
             </div>
             <div className='date-filter-gray'>
             <i className="bi bi-calendar-check calendar-icon"></i>
-            <DatePicker selected={startDate} value={eventDate} onChange={(date) => {setStartDate(date);setEventDate();}} onSelect={setEventDateF} className="date-picker"/>
-            <TimePicker defaultValue={dayjs('13:30', format)} format={format} className="time-picker"/>
+            <DatePicker selected={startDate} onChange={(date) => {setStartDate(date);setEventDate(moment(date).format("MMM Do YY"));}} className="date-picker"/>
+            <TimePicker defaultValue={dayjs('13:30', format)} format={format} onChange={(time) => {setEventTime(time)}} className="time-picker"/>
             </div>
 
             <div className='room-capacity'>
@@ -167,7 +165,7 @@ export default function NewEvent(){
                 <div>
                 <p>{title}</p>
                 <p><i className="bi bi-geo-alt pin-icon white-icon"></i>{address}</p>
-                <p><i className="bi bi-clock clock-icon white-icon"></i>{JSON.stringify(eventDate)}</p>
+                <p><i className="bi bi-clock clock-icon white-icon"></i>{eventDate}</p>
                 </div>
             </div>
             </div>

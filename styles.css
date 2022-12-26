@@ -802,7 +802,15 @@ video{
     margin-right: 7px;
     background-color: transparent;
     margin-left: 0px;
-    padding-right: 0px;
+    padding-right: 8px;
+}
+
+.span-margin{
+    margin-left:6px;
+}
+
+.Marker{
+    width: 30px!important;
 }
 
 .phone-running{

@@ -17,7 +17,7 @@ export default function NewRoom(){
                 <div className='room-info-upper'>
                 <p className='passed-name'>{newInput.state.name}</p>
                 <p className='passed-place'><i className="bi bi-geo-alt-fill white-icon"></i> {newInput.state.place}</p>
-                <p className='passed-time'><i className="bi bi-clock-fill white-icon"></i> {newInput.state.time} </p>
+                <p className='passed-time'><i className="bi bi-clock-fill white-icon"></i> {newInput.state.date} {/* <span className='span-margin'>14 PM</span> */}</p>
                 </div>
                 <div className='room-info-bottom'>
                     <p><b>{newInput.state.slogan}</b></p>
