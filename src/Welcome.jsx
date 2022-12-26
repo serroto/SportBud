@@ -12,7 +12,7 @@ import {
   } from 'react-places-autocomplete';
   
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-const defaultLocation = { lat: 38.463489, lng: 27.207897 };  
+const defaultLocation = { lat: 38.46498609609608, lng: 27.205795416060997 };
 
 export default function Welcome(){
     const [startDate, setStartDate] = useState(new Date());
@@ -84,7 +84,6 @@ export default function Welcome(){
                 const className = suggestion.active
                   ? 'suggestion-item--active'
                   : 'suggestion-item';
-                // inline style for demonstration purpose
                 const style = suggestion.active
                   ? { backgroundColor: '#fafafa', cursor: 'pointer' }
                   : { backgroundColor: '#ffffff', cursor: 'pointer' };
@@ -130,51 +129,56 @@ export default function Welcome(){
           <GoogleMap
           className="google-map-welcome"
             center={defaultLocation}
-            zoom={15}
+            zoom={15.2}
             mapContainerStyle={{ height: '520px', width: '770px'}}
           >
             <Marker
-              position={{ lat: 38.46698426184403, lng: 27.20696036128919 }}
+              position={{ lat: 38.46724923428583, lng:  27.208192055508267 }}
               icon = {{
-                // url: "src/assets/yoga-pin.png"
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                url: "src/assets/pilates-pin.png",
+                scaledSize: new google.maps.Size(50, 50)
               }}
-              // className="Marker"
             />
             <Marker
               position={{ lat: 38.466740652105116, lng: 27.20658485206456 }}
               icon = {{
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                url: "src/assets/cardio-pin.png",
+                scaledSize: new google.maps.Size(50, 50)
               }}
             />
              <Marker
               position={{ lat: 38.46367189173037, lng: 27.206902745666373 }}
               icon = {{
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                url: "src/assets/cardio-pin.png",
+                scaledSize: new google.maps.Size(50, 50)
               }}
             />
             <Marker
               position={ {lat: 38.46257088336663, lng: 27.21602825636435} }
               icon = {{
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                url: "src/assets/yoga-pin.png",
+                scaledSize: new google.maps.Size(50, 50)
               }}
             />
             <Marker
               position={ {lat: 38.461688130657755, lng: 27.217124314594948} }
               icon = {{
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                url: "src/assets/running-pin.png",
+                scaledSize: new google.maps.Size(50, 50)
               }}
             /> 
             <Marker
               position={ {lat: 38.462318648498844, lng: 27.203603032410086} }
               icon = {{
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                url: "src/assets/cardio-pin.png",
+                scaledSize: new google.maps.Size(50, 50)
               }}
             />
             <Marker  
               position={ {lat: 38.468919051514554, lng: 27.196540427843992} }
               icon = {{
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                url: "src/assets/running-pin.png",
+                scaledSize: new google.maps.Size(50, 50)
               }}
             />
             
