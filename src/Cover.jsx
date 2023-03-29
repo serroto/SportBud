@@ -1,6 +1,12 @@
+import React, { useContext, useEffect } from "react";
 import { Link } from 'react-router-dom'
+import Defines from "./context/defines";
 
 export default function Cover(){
+    let {defines, setDefines} = useContext(Defines);
+    useEffect(() => {
+        // console.log(defines.title);
+    },[])
     return (
         <div className='cover'>
             <nav className='cover-nav'>

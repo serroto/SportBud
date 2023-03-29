@@ -1,188 +1,217 @@
 import { Link } from 'react-router-dom'
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { TimePicker } from 'antd';
-import dayjs from 'dayjs';
-import PlacesAutocomplete from 'react-places-autocomplete';
-import {
-    geocodeByAddress,
-    geocodeByPlaceId,
-    getLatLng,
-  } from 'react-places-autocomplete';
-  
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-const defaultLocation = { lat: 38.46498609609608, lng: 27.205795416060997 };
+import axios from 'axios';
 
-export default function Welcome(){
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import Defines from './context/defines';
+let defaultLocation;
+
+export default function Welcome() {
     const [startDate, setStartDate] = useState(new Date());
+    const [search, setSearch] = useState(0);
+
     const format = 'HH:mm';
-    const[address,setAdress] = useState();
-    const [coordinates, setCoordinates] = useState({
-        lat:null,
-        lng:null
-    })
-    const handleSelect = async value=>{
-        const results = await geocodeByAddress(value);
-        const ll = await getLatLng(results[0])
-        // you can pass ll
-        setAdress(value)
-        setCoordinates(ll)
+    const [address, setAdress] = useState("")
+    const [time, setTime] = useState("");
+
+    let { defines, setDefines } = useContext(Defines);
+
+    const [categories, setCategories] = useState([]);
+
+    const [activities, setActivities] = useState([]);
+
+    useEffect(() => {
+
+        let URL1 = "//164.90.184.39:9999/categories";
+        axios
+            .get(URL1)
+            .then(response => setCategories(response.data))
+            .catch(function (error) {
+                console.log(error);
+            })
+
+        let URL2 = "//164.90.184.39:9999/activities";
+        axios
+            .get(URL2)
+            .then(response => {
+                let list = search ? response.data.filter(item => item.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] && item.title.includes(address)) : response.data
+                setActivities(list)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log("Latitude is :", position.coords.latitude);
+            console.log("Longitude is :", position.coords.longitude);
+            defaultLocation = { lat: position.coords.latitude, lng: position.coords.longitude }
+        });
+
+        // setUser(JSON.parse(localStorage.getItem('defines')))
+    }, [startDate, address, time])
+
+
+    function convertLatLng(x) {
+        return parseFloat(x);
+    }
+    function renderSwitch(x) {
+        switch (x) {
+            case '638e675d4321c700312ff674':
+                return 'src/assets/cardio-pin.png';
+            case '638e69544321c700312ff679':
+                return 'src/assets/running-pin.png';
+            case '638e69cd4321c700312ff67b':
+                return 'src/assets/pilates-pin.png';
+            case '639f73052b33750031d145f9':
+                return 'src/assets/yoga-pin.png';
+            default:
+                return 'src/assets/cardio-pin.png';
+        }
+    }
+    function renderBranchPic(x) {
+        switch (x) {
+            case '638e675d4321c700312ff674':
+                return 'src/assets/cardio.png';
+            case '638e69544321c700312ff679':
+                return 'src/assets/running.png';
+            case '638e69cd4321c700312ff67b':
+                return 'src/assets/pilates.png';
+            case '639f73052b33750031d145f9':
+                return 'src/assets/yoga.png';
+            default:
+                return 'src/assets/cardio.png';
+        }
     }
 
     return (
         <div className='welcome'>
-        <nav className='welcome-nav'>
-          <Link to="/"><img src="src/assets/logo.png" alt="logo" className='logo'/></Link>
-          <span className='nav-links'>
-            <Link to="/welcome">Home</Link>
-            <Link to="/profile">Profile</Link>
-          </span>
-        </nav>
+            <nav className='welcome-nav'>
+                <Link to="/"><img src="src/assets/logo.png" alt="logo" className='logo' /></Link>
+                <span className='nav-links'>
+                    <Link to="/welcome">Home</Link>
+                    <Link to="/profile">Profile</Link>
+                    <div className='logout' onClick={()=>{
+                        localStorage.clear()
+                        window.location = '/Login'
+                    }}>Logout</div>
 
-            <div className='search-bar'>
-            <input type="text" placeholder="Find your branch or room"/> <span className='search-icon-box'><i className="bi bi-search"/></span>
-            </div>
+                </span>
+            </nav>
+
+            {/* <div className='search-bar'>
+                <input type="text" placeholder="Find your branch or room" /> <span className='search-icon-box'><i className="bi bi-search" /></span>
+            </div> */}
 
             <div className='carousel'>
                 <h6>Categories</h6>
-                <div className='box'>
+                <div className='cat-box'>
+
                     <span className='cat-box-img'>
-                        <img src="src/assets/running.png"/>
-                        <img src="src/assets/pilates.png"/>
-                        <Link to="/branch"><img src="src/assets/cardio.png"/></Link>
-                        <img src="src/assets/yoga.png"/>
+                        {
+                            categories.map((x, y) => <span key={y}>
+                                <Link to="/branch"><img src={renderBranchPic(x._id)} onClick={() => {
+                                    localStorage.setItem('category_id', x._id)
+                                    window.location = "/branch";
+                                }} /></Link>
+                            </span>
+                            )
+                        }
                     </span>
                     <span className='cat-box-text'>
-                        <span>Running</span>
-                        <span>Pilates</span>
-                        <Link to="/branch"><span>Cardio</span></Link>
-                        <span className='extra-margin'>Yoga</span>
+                        {
+                            categories.map((x, y) => <span key={y}>
+                                <span><span style={{ cursor: 'pointer' }} onClick={() => {
+                                    console.log(x._id);
+                                    setDefines(prev => {
+                                        const newDefines = { ...prev };
+                                        newDefines.category_id = x._id;
+                                        return newDefines;
+                                    })
+                                    window.location = "/branch";
+                                }} >{x.title}</span></span>
+                            </span>
+                            )
+                        }
                     </span>
                 </div>
 
                 <div className='filters-yellow'>
-          <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className="date-picker-yellow"/>
-          <TimePicker placeholder='Time' format={format} className="time-picker-yellow"/>
-          <PlacesAutocomplete
-        value={address}
-        onChange={setAdress}
-        onSelect={handleSelect}
-        className="location-picker-yellow"
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div key={suggestions.description}>
-            <input
-              {...getInputProps({
-                placeholder: 'Place',
-                className: 'location-search-input-yellow',
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading..</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
-          </div>
+                    <DatePicker selected={startDate} onChange={(date) => {
+                        // console.log(date.toISOString().split("T")[0]);
+                        // console.log(activities[0].contents.startedActRoom.substr(0, 10));
+                        // console.log(activities.filter(item => item.contents.startedActRoom.substr(0, 10) === date.toISOString().substr(0, 10)))
+                        setStartDate(date)
+                        setSearch(1)
 
-                <h6>Event Rooms Near You</h6>
-                <div className='near-event-box'>
-                    <div className='event-box-text'>
-                        <span>Büyük Park</span>
-                        <span>Fethi Sekin Park</span>
-                    </div>
-                    <div className='event-box-branch-text'>
-                        <span>Yoga</span> <span>Running</span>
-                    </div>
-                    <div className='event-box-img'>
-                    <Link to="/room"><img src="src/assets/people-yoga.png"/></Link>
-                    <img src="src/assets/people-running.png"/>
-                    </div>
-                    <div className='km'>
-                        <span><i className="bi bi-geo-alt km-icon"></i>1KM </span>
-                        <span><i className="bi bi-geo-alt km-icon"></i>4KM</span>
-                    </div>
+                    }} className="date-picker-yellow" />
+                    {/* <TimePicker placeholder='Time' format={format} onChange={(time) => {
+                        setTime(time);
+                    }} className="time-picker-yellow" /> */}
+                    <Input
+                        value={address}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            // console.log(value);
+                            setAdress(value)
+                            setSearch(1)
+                        }}
+                        className="location-search-input-yellow"
+                        placeholder='Place'
+                        style={{ width: 130 }}
+                    />
+                </div>
+
+                <h6>Popular Event Rooms</h6>
+
+                <div className='welcome-event-box'>
+                    {
+                        activities.map((x, y) =>
+                            <div key={y}
+                            // Geçici kapatıldı:
+                            // style={{display:x.contents.startedActRoom.substr(0, 10) === startDate.toISOString().substr(0, 10) ? "block" : "none"}}
+                            >
+                                <span className='branch-box-img' onClick={() => {
+                                    localStorage.setItem('activity_id', x._id);
+                                    window.location = "/room";
+                                }}>
+                                    <img src="src/assets/cardio-1.png" alt="" style={{ display: x.contents.category_id === '638e675d4321c700312ff674' ? 'block' : 'none' }} />
+                                    <img src="src/assets/people-running.png" alt="" style={{ display: x.contents.category_id === '638e69544321c700312ff679' ? 'block' : 'none' }} />
+                                    <img src="src/assets/yoga-room-pic.png" alt="" style={{ display: x.contents.category_id === '638e69cd4321c700312ff67b' ? 'block' : 'none' }} />
+                                    <img src="src/assets/people-yoga.png" alt="" style={{ display: x.contents.category_id === '639f73052b33750031d145f9' ? 'block' : 'none' }} />
+                                    <p>{x.title}</p>
+                                    <p>{x.contents.location}</p>
+                                    <p>{x.contents.startedActRoom.substr(0, 10)}</p>
+                                </span>
+                            </div>
+                        )
+                    }
+
                 </div>
             </div>
 
             <div className='Map'>
-                {/* <img src="src/assets/welcome-map-google.png" alt="map" className='welcome-map'/> */}
-          <GoogleMap
-          className="google-map-welcome"
-            center={defaultLocation}
-            zoom={15.2}
-            mapContainerStyle={{ height: '520px', width: '770px'}}
-          >
-            <Marker
-              position={{ lat: 38.46724923428583, lng:  27.208192055508267 }}
-              icon = {{
-                url: "src/assets/pilates-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            />
-            <Marker
-              position={{ lat: 38.466740652105116, lng: 27.20658485206456 }}
-              icon = {{
-                url: "src/assets/cardio-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            />
-             <Marker
-              position={{ lat: 38.46367189173037, lng: 27.206902745666373 }}
-              icon = {{
-                url: "src/assets/cardio-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            />
-            <Marker
-              position={ {lat: 38.46257088336663, lng: 27.21602825636435} }
-              icon = {{
-                url: "src/assets/yoga-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            />
-            <Marker
-              position={ {lat: 38.461688130657755, lng: 27.217124314594948} }
-              icon = {{
-                url: "src/assets/running-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            /> 
-            <Marker
-              position={ {lat: 38.462318648498844, lng: 27.203603032410086} }
-              icon = {{
-                url: "src/assets/cardio-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            />
-            <Marker  
-              position={ {lat: 38.468919051514554, lng: 27.196540427843992} }
-              icon = {{
-                url: "src/assets/running-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            />
-            
-          </GoogleMap>
+                <GoogleMap
+                    className="google-map-welcome"
+                    center={defaultLocation}
+                    zoom={15.2}
+                    mapContainerStyle={{ height: '520px', width: '770px' }}
+                >
+                    {
+                        activities.map((x, y) => <span key={y}>
+                            <Marker
+                                position={{ lat: convertLatLng(x.contents.latitude), lng: convertLatLng(x.contents.longitude) }}
+                                icon={{
+                                    url: renderSwitch(x.contents.category_id),
+                                    scaledSize: new google.maps.Size(50, 50)
+                                }}
+                            />
+                        </span>
+                        )
+                    }
+
+                </GoogleMap>
 
             </div>
         </div>

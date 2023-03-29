@@ -1,159 +1,212 @@
 import { Link } from 'react-router-dom'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { TimePicker } from 'antd';
-import dayjs from 'dayjs';
-import PlacesAutocomplete from 'react-places-autocomplete';
-import {
-    geocodeByAddress,
-    geocodeByPlaceId,
-    getLatLng,
-  } from 'react-places-autocomplete';
+import { TimePicker, Input } from 'antd';
+import axios from 'axios';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+const defaultLocation = { lat: 38.46498609609608, lng: 27.205795416060997 };
 
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-const defaultLocation = { lat: 38.46498609609608, lng: 27.205795416060997 };   
+export default function Branch() {
 
-export default function Branch(){
+    const [search, setSearch] = useState(0);
+    const [time, setTime] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const format = 'HH:mm';
-    const[address,setAdress] = useState();
-    const [coordinates, setCoordinates] = useState({
-        lat:null,
-        lng:null
-    })
-    const handleSelect = async value=>{
-        const results = await geocodeByAddress(value);
-        const ll = await getLatLng(results[0])
-        // you can pass ll
-        setAdress(value)
-        setCoordinates(ll)
+    const [address, setAdress] = useState();
+
+
+    const [activities, setActivities] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState({});
+    const [user, setUser] = useState({});
+
+    // const [category_id, setCategory_ID] = useState(0);
+    useEffect(() => {
+
+        // console.log(localStorage.getItem('category_id'));
+        let URL1 = "//164.90.184.39:9999/categories";
+        axios
+            .get(URL1)
+            .then(response => {
+                let list = response.data.filter(item => item._id === localStorage.getItem('category_id'))
+                setCategories(list)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+        let URL2 = "//164.90.184.39:9999/activities";
+        axios
+            .get(URL2)
+            .then(response => {
+                let list = search ? response.data.filter(item => item.contents.category_id === localStorage.getItem('category_id') && item.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] && item.title.includes(address)) : response.data.filter(item => item.contents.category_id === localStorage.getItem('category_id'))
+                // console.log(list)
+                setActivities(list)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+
+
+        let URL3 = "//164.90.184.39:9999/categories?id=" + localStorage.getItem('category_id')
+        axios
+            .get(URL3)
+            .then(response => {
+
+                setCategory(response.data.contents)
+
+            })
+            .catch(errors => console.log(errors))
+
+
+      
+
+    }, [startDate, address, time])
+
+    function convertLatLng(x) {
+        return parseFloat(x);
     }
+    function renderSwitch(x) {
+        switch (x) {
+            case '638e675d4321c700312ff674':
+                return 'src/assets/cardio-pin.png';
+            case '638e69544321c700312ff679':
+                return 'src/assets/running-pin.png';
+            case '638e69cd4321c700312ff67b':
+                return 'src/assets/pilates-pin.png';
+            case '639f73052b33750031d145f9':
+                return 'src/assets/yoga-pin.png';
+            default:
+                return 'src/assets/cardio-pin.png';
+        }
+    }
+
     return (
         <div className='branch'>
             <nav className='branch-nav'>
-          <Link to="/"><img src="src/assets/sportbud_logo_dark.png" alt="logo" className='dark-logo'/></Link>
-          <span className='nav-links light'>
-            <Link to="/welcome">Home</Link>
-            <Link to="/profile">Profile</Link>
-          </span>
+                <Link to="/"><img src="src/assets/sportbud_logo_dark.png" alt="logo" className='dark-logo' /></Link>
+                <span className='nav-links light'>
+                    <Link to="/welcome">Home</Link>
+                    <Link to="/profile">Profile</Link>
+                    <div className='logout' onClick={()=>{
+                        localStorage.clear()
+                        window.location = '/Login'
+                    }}>Logout</div>
+                </span>
             </nav>
 
+            <div className='carousel branch-carousel'>
+
             <div className='search-bar'>
-            <input type="text" placeholder="Cardio"/> <span className='search-icon-box'><i className="bi bi-search"/></span>
+                {
+                    categories.map((x, y) =>
+                        <div key={y} style={{ display: x._id === localStorage.getItem('category_id') ? "block" : "none" }}>
+                            <input type="text" placeholder={x.title} disabled /> <span className='search-icon-box'><i className="bi bi-search" /></span>
+                        </div>
+                    )
+                }
             </div>
 
-            <div className='branch-description'><span>Branch Info:</span> Cardio is defined as any type of exercise that gets your heart rate up and keeps it up for a prolonged period of time.</div>
-
-            <div className='filters-yellow filters-yellow-branch'>
-          <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className="date-picker-yellow"/>
-          <TimePicker placeholder='Time' format={format} className="time-picker-yellow"/>
-          <PlacesAutocomplete
-        value={address}
-        onChange={setAdress}
-        onSelect={handleSelect}
-        className="location-picker-yellow"
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div key={suggestions.description}>
-            <input
-              {...getInputProps({
-                placeholder: 'Place',
-                className: 'location-search-input-yellow',
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading..</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })}
+            <div className='branch-description'><span>Branch Info:</span>
+                {
+                    categories.map((x, y) =>
+                        <div key={y} style={{ display: x._id === localStorage.getItem('category_id') ? "block" : "none" }}>
+                            <span alt="branch-desc">{x.contents.short_description}</span>
+                        </div>
+                    )
+                }
             </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
-          </div>
+            <div className='filters-yellow'>
+                    <DatePicker selected={startDate} onChange={(date) => {
+                        // console.log(date.toISOString().split("T")[0]);
+                        // console.log(activities[0].contents.startedActRoom.substr(0, 10));
+                        // console.log(activities.filter(item => item.contents.startedActRoom.substr(0, 10) === date.toISOString().substr(0, 10)))
+                        setStartDate(date)
+                        setSearch(1)
 
-            <div className='branch-rooms carousel'>
-                <div className='branch-box'>
-                    <span className='branch-box-img'>
-                    <img src="src/assets/cardio-1.png" alt="" />
-                    </span>
-                    <span>
-                        <img src="src/assets/cardio-1-text.png" alt="" className='cardio-text'/>
-                    </span>
-                    {/* <div className='box-text'>
-                    <span>Aşık Veysel Park</span>
-                    <p><i className="bi bi-geo-alt km-icon"></i>1km </p>
-                    </div> */}
+                    }} className="date-picker-yellow" />
+                    {/* <TimePicker placeholder='Time' format={format} onChange={(time) => {
+                        setTime(time);
+                    }} className="time-picker-yellow" /> */}
+                    <Input
+                        value={address}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            // console.log(value);
+                            setAdress(value)
+                            setSearch(1)
+                        }}
+                        className="location-search-input-yellow"
+                        placeholder='Place'
+                        style={{ width: 130 }}
+                    />
                 </div>
-                <div className='branch-box'>
-                    <span className='branch-box-img'>
-                    <img src="src/assets/cardio-2.png" alt="" />
-                    </span>
-                    <span>
-                        <img src="src/assets/cardio-2-text.png" alt="" className='cardio-text'/>
-                    </span>
-                    {/* <span className='box-text'>
-                    <span>Fethi Sekin Park <br />2km</span>
-                    <p><i className="bi bi-geo-alt km-icon"></i>2km </p>
-                    </span> */}
+            <br />
+            <br />
+            <br />
+            <h6 style={{color:"#000000"}}>Popular Event Rooms</h6>
+                
+   
+                <div className='welcome-event-box'>
+                    {
+                        activities.map((x, y) =>
+                            <div key={y}
+                            // Geçici kapatıldı:
+                            // style={{display:x.contents.startedActRoom.substr(0, 10) === startDate.toISOString().substr(0, 10) ? "block" : "none"}}
+                            >
+                                <span className='branch-box-img' onClick={()=>{
+                                    localStorage.setItem('activity_id', x._id)
+                                    window.location = "/room";
+                                }}>
+                                    <img src="src/assets/cardio-1.png" alt="" style={{ display: x.contents.category_id === '638e675d4321c700312ff674' ? 'block' : 'none' }} />
+                                    <img src="src/assets/people-running.png" alt="" style={{ display: x.contents.category_id === '638e69544321c700312ff679' ? 'block' : 'none' }} />
+                                    <img src="src/assets/yoga-room-pic.png" alt="" style={{ display: x.contents.category_id === '638e69cd4321c700312ff67b' ? 'block' : 'none' }} />
+                                    <img src="src/assets/people-yoga.png" alt="" style={{ display: x.contents.category_id === '639f73052b33750031d145f9' ? 'block' : 'none' }} />
+                                    <p alt="activity-name">{x.title}</p>
+                                    <p>{x.contents.location}</p>
+                                    <p>{x.contents.startedActRoom.substr(0, 10)}</p>
+                                </span>
+                            </div>
+                        )
+                    }
+
                 </div>
-                <Link to="/newevent">
-                <div className='box'>
-                    {/* <span className='plus-icon'><i class="bi bi-plus-lg"/></span> */}
-                    <span><img src="src/assets/plus-sign.png" alt="" className='plus-sign'/></span>
-                    <span className='plus-text'>Create New Event</span>
-                </div>
+
+            <div className='branch-rooms carousel' style={{marginLeft:"0px",marginTop:"50px", paddingBottom:"50px"}}>
+
+                <Link to="/newevent" style={{marginLeft:"0px"}}>
+                    <div className='cat-box'>
+                        <span><img src="src/assets/plus-sign.png" alt="" className='plus-sign' /></span>
+                        <span className='plus-text'>Create New Event</span>
+                    </div>
                 </Link>
+            </div>
             </div>
 
             <div className='Map branch-map'>
-                {/* <img src="src/assets/welcome-map-google.png" alt="map" className='branch-map'/> */}
                 <GoogleMap
-          className="google-map-welcome"
-            center={defaultLocation}
-            zoom={16}
-            mapContainerStyle={{ height: '500px', width: '760px'}}
-          >
-            <Marker
-              position={{ lat: 38.466740652105116, lng: 27.20658485206456 }}
-              icon = {{
-                url: "src/assets/cardio-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            />
-             <Marker
-              position={{ lat: 38.46367189173037, lng: 27.206902745666373 }}
-              icon = {{
-                url: "src/assets/cardio-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            />
-            <Marker
-              position={ {lat: 38.462318648498844, lng: 27.203603032410086} }
-              icon = {{
-                url: "src/assets/cardio-pin.png",
-                scaledSize: new google.maps.Size(50, 50)
-              }}
-            />
-            
-          </GoogleMap>
+                    className="google-map-welcome"
+                    center={defaultLocation}
+                    zoom={15.2}
+                    mapContainerStyle={{ height: '520px', width: '770px' }}
+                >
+                    {
+                        activities.map((x, y) => <span key={y}>
+                            <Marker
+                                position={{ lat: convertLatLng(x.contents.latitude), lng: convertLatLng(x.contents.longitude) }}
+                                icon={{
+                                    url: renderSwitch(x.contents.category_id),
+                                    scaledSize: new google.maps.Size(50, 50)
+                                }}
+                            />
+                        </span>
+                        )
+                    }
+
+                </GoogleMap>
+
             </div>
         </div>
     )
