@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom'
 import React, { useEffect, useState, useContext } from "react";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import moment from 'moment';
+import dayjs from 'dayjs';
+import { Input, Select, TimePicker, InputNumber } from 'antd';
 import axios from 'axios';
 
 import { GoogleMap, Marker } from '@react-google-maps/api';
@@ -22,7 +25,14 @@ export default function Welcome() {
 
     const [activities, setActivities] = useState([]);
 
+    // const [user, setUser] = useState({});
+
+
     useEffect(() => {
+
+        // if(JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
+        //     window.location = "/login";
+        // }
 
         let URL1 = "//164.90.184.39:9999/categories";
         axios
@@ -37,6 +47,7 @@ export default function Welcome() {
             .get(URL2)
             .then(response => {
                 let list = search ? response.data.filter(item => item.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] && item.title.includes(address)) : response.data
+                // console.log(list)
                 setActivities(list)
             })
             .catch(function (error) {
