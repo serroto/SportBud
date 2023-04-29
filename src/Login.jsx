@@ -16,7 +16,11 @@ export default function Login() {
     });
 
     useEffect(()=>{
-    
+        //  if(typeof localStorage.getItem('defines') !== "undefined"){
+        //     if(JSON.parse(localStorage.getItem('defines'))['deleted'] === 0){
+        //         window.location = "/welcome";
+        //     }
+        //  }
 
     })
 
