@@ -4,12 +4,32 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
 import dayjs from 'dayjs';
+import { GoogleApiWrapper } from 'google-maps-react';
 
 import axios from 'axios';
 import { Input, Select, TimePicker, InputNumber} from 'antd';
 
-export default function NewEvent() {
+// function searchLocation(address, props) {
+//     const { google } = props;
+//     const geocoder = new google.maps.Geocoder();
+  
+//     geocoder.geocode({ address }, (results, status) => {
+//       if (status === "OK") {
+//         const { lat, lng } = results[0].geometry.location;
+//         console.log("Enlem:", lat());
+//         console.log("Boylam:", lng());
+//       } else {
+//         console.error("Konum bilgisi alınamadı. Hata:", status);
+//       }
+//     });
+//   }
+        
+//   export default GoogleApiWrapper({
+//     apiKey: "YOUR_API_KEY",
+//   })(NewEvent);
 
+export default function NewEvent(props) {
+          
     const [data, setData] = useState(
         {
             parent_id: "",
@@ -20,7 +40,7 @@ export default function NewEvent() {
             contents: {
                 category_id: "638e675d4321c700312ff674",
                 admin_id: "63979d62e86bed0031cecaf3",
-                admin: "irem",
+                admin: JSON.parse(localStorage.getItem('defines')).contents.nickname,
                 location: "",
                 latitude: "38.462742",
                 longitude: "27.166210",
@@ -87,7 +107,10 @@ export default function NewEvent() {
                             <i className="bi bi-geo-alt pin-icon"></i>
                             <Input placeholder="Place" className='location-picker' onChange={(e) => {
                                 const value = e.target.value;
-                                console.log(value);
+                                //console.log(value);
+                                searchLocation(value);    
+
+
                                 setData(prev => {
                                     const newData = { ...prev };
                                     newData.contents.location = value;
@@ -185,6 +208,7 @@ export default function NewEvent() {
                         <button className='create-room-btn' onClick={() => { 
                             axios.post("//164.90.184.39:9999/activities", data)
                             .then(response => {
+                                // console.log(response.data.contents.category_id);
                                 localStorage.setItem('activity_id',response.data._id)
                                 setTimeout(()=>{window.location = "/room";}, 3000);
                             })
