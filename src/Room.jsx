@@ -4,7 +4,14 @@ import { Input } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 
+
+
 export default function Room() {
+
+    // function user_name(user_id)
+    //    console.log(user_id)
+    // }
+
 
     let [data1, setData1] = useState({});
     let [data2, setData2] = useState({});
@@ -18,7 +25,10 @@ export default function Room() {
     });
 
     useEffect(() => {
-        console.log(message)
+        // console.log(message)
+        // console.log(JSON.parse(localStorage.getItem('defines')));
+
+
         let URL1 = "//164.90.184.39:9999/activities?id=" + localStorage.getItem('activity_id');
         // console.log(URL1);
         axios
@@ -32,6 +42,7 @@ export default function Room() {
         axios
             .get(URL2)
             .then(response => {
+
                 // console.log(response.data.contents.clients_infos)
                 setData2(response.data.contents)
 
@@ -49,15 +60,21 @@ export default function Room() {
             })
             .catch(errors => console.log(errors))
 
+
+
+        // console.log(JSON.parse(localStorage.getItem('defines'))._id , data2.admin_id)
+
+
     }, [])
     return (
+
         <div className="activity-room">
             <nav className='activity-room-nav'>
                 <Link to="/"><img src="src/assets/sportbud_logo_dark.png" alt="logo" className='dark-logo' /></Link>
                 <span className='nav-links'>
                     <Link to="/welcome">Home</Link>
                     <Link to="/profile">Profile</Link>
-                    <div className='logout' onClick={()=>{
+                    <div className='logout' onClick={() => {
                         localStorage.clear()
                         window.location = '/Login'
                     }}>Logout</div>
@@ -76,27 +93,96 @@ export default function Room() {
                         <p>THIS ROOM'S CAPACITY<span className='darker'>: {data2.capacity}</span></p>
                         <p>PARTICIPANTS</p>
                         {data2.clients_infos && data2.clients_infos.map((x, y) => (
-                                <p className='participants' key={y}>{x.user_name}</p>
-                            ))}
+                            <p key={y}>{x.user_name}</p>
+                        ))}
 
-                        <button className='mail-button' style={{marginTop:"15px", display: data2.clients_infos && data2.clients_infos.length <= data2.capacity ? 'block' : 'none' }} onClick={() => {
-							
-							let URL = "//164.90.184.39:9999/activities/" + localStorage.getItem('activity_id');
-                            
-							axios
-								.put(URL, {
-                                    
-                                        user_id: JSON.parse(localStorage.getItem("defines"))._id,
-                                        user_name: JSON.parse(localStorage.getItem("defines")).contents.firstname + " " + JSON.parse(localStorage.getItem("defines")).contents.lastname
-                                    
-                                })
-								.then(response => {
-								  console.log(response.data)
-                                  window.location.reload()
-                                    
-                                });
-                                
-						}}><i className="bi bi-plus-lg"></i>  JOIN ROOM</button>
+
+
+
+
+
+                        {data2.clients_infos && (
+                            <div>
+                                {!(data2.clients_infos.find(i => i.user_id === JSON.parse(localStorage.getItem('defines'))._id)) && (
+                                    <div>
+                                        console.log(Lenght : {data2.clients_infos.length})
+                                        console.log(Capa : {data2.capacity})
+                                        <button className='mail-button' style={{
+                                            display: (data2.clients_infos && (data2.clients_infos.length)+1 < data2.capacity)
+                                            // +1 ile odanın adminini ekliyorum
+
+                                                && JSON.parse(localStorage.getItem('defines'))._id === data2.admin_id
+                                                ? 'block' : 'none'
+                                        }} onClick={() => {
+                                            // console.log(request);
+
+
+                                            let URL = "//164.90.184.39:9999/activities/" + localStorage.getItem('activity_id');
+
+                                            axios
+                                                .put(URL, {
+                                                    operation: "update",
+                                                    user_id: JSON.parse(localStorage.getItem("defines"))._id,
+                                                    user_name: JSON.parse(localStorage.getItem("defines")).contents.firstname + " " + JSON.parse(localStorage.getItem("defines")).contents.lastname
+
+                                                })
+                                                .then(response => {
+                                                    //console.log(response.data)
+                                                    window.location.reload()
+
+                                                });
+
+                                        }}><i className="bi bi-plus-lg"></i>  JOIN ROOM</button>
+
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+
+
+
+
+
+
+                        {data2.clients_infos && (
+                            <div>
+                                {(data2.clients_infos.find(i => i.user_id === JSON.parse(localStorage.getItem('defines'))._id)) && (
+                                    <div>
+
+                                        <button className='mail-button' style={{
+                                            display: (data2.clients_infos && data2.clients_infos.length <= data2.capacity) ? 'block' : 'none'
+                                        }} onClick={() => {
+                                            // console.log(requset);
+
+
+                                            let URL = "//164.90.184.39:9999/activities/" + localStorage.getItem('activity_id');
+
+                                            axios
+                                                .put(URL, {
+                                                    operation: "delete",
+                                                    user_id: JSON.parse(localStorage.getItem("defines"))._id
+
+                                                })
+                                                .then(response => {
+                                                    //console.log(response.data)
+                                                    window.location.reload()
+
+                                                });
+
+                                        }}><i className="bi bi-x-circle-fill"></i>  EXIT ROOM</button>
+
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+
+
+
+
+
+
                     </div>
                 </div>
 
@@ -108,7 +194,7 @@ export default function Room() {
                                 <label>Username</label>
                                 <Input placeholder='Mesajınızı giriniz ...' onChange={() => {
                                     setData(prev => {
-                                        const newData = { ...prev };
+                                        const Data = { ...prev };
                                         newData.contents.capacity = value;
                                         return newData;
                                     })
@@ -128,17 +214,23 @@ export default function Room() {
                         </div>
                         <div className="messages">
 
-                            {data3.map((x, y) => <div key={y}className={x.profile_id === JSON.parse(localStorage.getItem('defines'))._id ? "message my-message" : "message other-message"}>
-                                    <div>
-                                        <div className="name">{x.nickname}</div>
-                                        <div className="text">{x.text}</div>
-                                    </div>
+                            {data3.map((x, y) => <div key={y} className={x.profile_id === JSON.parse(localStorage.getItem('defines'))._id ? "message my-message" : "message other-message"}>
+                                <div>
+                                    <div className="name">{x.nickname}</div>
+                                    <div className="text">{x.text}</div>
                                 </div>
+                            </div>
 
                             )}
+                            {/* <div className="update">
+                            Abc is joined the conversation
+                            </div> */}
+
+
+
                         </div>
                         <div className="typebox">
-                            <Input type="text" className="message-input" onChange={ e =>{
+                            <Input type="text" className="message-input" onChange={e => {
                                 let value = e.target.value
                                 setMessage(prev => {
                                     const newMessage = { ...prev };
@@ -146,13 +238,13 @@ export default function Room() {
                                     return newMessage;
                                 })
                             }} />
-                            <button className='send-message' onClick={()=>{
+                            <button className='send-message' onClick={() => {
 
                                 let URL = "//164.90.184.39:9999/activitieschats"
 
                                 axios
                                     .post(URL, message)
-                                    .then(response => {window.location.reload()}) 
+                                    .then(response => { window.location.reload() })
                                     .catch(function (error) {
                                         console.log(error);
                                     })
@@ -164,6 +256,7 @@ export default function Room() {
                 </div>
 
             </div>
+
         </div>
     );
 }
