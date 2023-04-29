@@ -1077,7 +1077,7 @@ video{
     width: 450px;
     height: 600px;
     margin-left: 90px;
-    margin-top: 90px;
+    margin-top: 100px;
     font-weight: 500;
 }
 
@@ -1111,7 +1111,7 @@ video{
 
 .room-info div:nth-child(2){
     margin: 30px;
-    margin-top: 30px;
+    margin-top: 50px;
     font-size: 12px;
     color: #595959;
 }
@@ -1146,10 +1146,6 @@ video{
 
 .carousel a:hover{
     color: #f3f5f6;
-}
-
-.participants{
-    margin-bottom: 5px;
 }
 
 /* Profile Page CSS */
@@ -1299,6 +1295,7 @@ video{
     font-size: 15px;
     cursor: pointer;
     outline: none;
+    opacity: 0;
 }
 
 .chat-screen .messages{
