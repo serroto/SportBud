@@ -4,31 +4,34 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
 import dayjs from 'dayjs';
-import { GoogleApiWrapper } from 'google-maps-react';
 
 import axios from 'axios';
-import { Input, Select, TimePicker, InputNumber} from 'antd';
+import { Input, Select, TimePicker, InputNumber } from 'antd';
 
-// function searchLocation(address, props) {
-//     const { google } = props;
-//     const geocoder = new google.maps.Geocoder();
-  
-//     geocoder.geocode({ address }, (results, status) => {
-//       if (status === "OK") {
-//         const { lat, lng } = results[0].geometry.location;
-//         console.log("Enlem:", lat());
-//         console.log("Boylam:", lng());
-//       } else {
-//         console.error("Konum bilgisi alınamadı. Hata:", status);
-//       }
-//     });
-//   }
-        
-//   export default GoogleApiWrapper({
-//     apiKey: "YOUR_API_KEY",
-//   })(NewEvent);
+import PlacesAutocomplete,{
+    geocodeByAddress,
+    getLatLng,
+} from 'react-places-autocomplete';
+
 
 export default function NewEvent(props) {
+
+    const [address, setAdress] = useState("");
+    const [coordinates, setCoordinates] = useState({
+        lat: null,
+        lng: null
+    });
+    const handleSelect = async value => {
+        const results = await geocodeByAddress(value);
+        const ll = await getLatLng(results[0]);
+        setAdress(value);
+        data.contents.location = address;
+        setCoordinates(ll);
+        console.log(ll);
+        data.contents.latitude = ll.lat;
+        data.contents.longitude = ll.lng;
+    }
+
           
     const [data, setData] = useState(
         {
@@ -41,9 +44,9 @@ export default function NewEvent(props) {
                 category_id: "638e675d4321c700312ff674",
                 admin_id: "63979d62e86bed0031cecaf3",
                 admin: JSON.parse(localStorage.getItem('defines')).contents.nickname,
-                location: "",
-                latitude: "38.462742",
-                longitude: "27.166210",
+                location: address,
+                latitude: coordinates.lat,
+                longitude: coordinates.lng,
                 min_client: 3,
                 max_client: 12,
                 capacity: 3,
@@ -90,7 +93,7 @@ export default function NewEvent(props) {
                 <span className='nav-links light'>
                     <Link to="/welcome">Home</Link>
                     <Link to="/profile">Profile</Link>
-                    <div className='logout' onClick={()=>{
+                    <div className='logout' onClick={() => {
                         localStorage.clear()
                         window.location = '/Login'
                     }}>Logout</div>
@@ -105,53 +108,78 @@ export default function NewEvent(props) {
 
                         <div className="maps-gray">
                             <i className="bi bi-geo-alt pin-icon"></i>
-                            <Input placeholder="Place" className='location-picker' onChange={(e) => {
-                                const value = e.target.value;
-                                //console.log(value);
-                                searchLocation(value);    
-
-
-                                setData(prev => {
-                                    const newData = { ...prev };
-                                    newData.contents.location = value;
-                                    return newData;
-                                })
-                            }} style={{ width: 180, marginLeft: 23 }} />
+                            <PlacesAutocomplete
+                                value={address}
+                                onChange={setAdress}
+                                onSelect={handleSelect}
+                            >
+                                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                    <div>
+                                        <input
+                                            {...getInputProps({
+                                                placeholder: 'Places',
+                                                className: 'location-search-input',
+                                            })}
+                                        />
+                                        <div className="autocomplete-dropdown-container"> 
+                                            {loading && <div>Loading...</div>}
+                                            {suggestions.map((suggestion, y) => {
+                                                const className = suggestion.active
+                                                    ? 'suggestion-item--active'
+                                                    : 'suggestion-item';
+                                                const style = suggestion.active
+                                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                                return (
+                                                    <div key={y}
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            className,
+                                                            style,
+                                                        })}
+                                                    >
+                                                        <span>{suggestion.description}</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+                            </PlacesAutocomplete>
                         </div>
                         <div className='date-filter-gray'>
                             <i className="bi bi-calendar-check calendar-icon"></i>
-                            <DatePicker selected={startDate} onChange={(date) => { 
+                            <DatePicker selected={startDate} onChange={(date) => {
                                 const value = moment(date).toISOString();
-                                    console.log(value);
-                                    setData(prev => {
-                                        const newData = { ...prev };
-                                        newData.contents.startedActRoom = value;
-                                        return newData;
-                                    })
-                                }} className="date-picker" />
-                            <TimePicker defaultValue={dayjs('13:30', format)} format={format} onChange={(time) => { 
+                                console.log(value);
+                                setData(prev => {
+                                    const newData = { ...prev };
+                                    newData.contents.startedActRoom = value;
+                                    return newData;
+                                })
+                            }} className="date-picker" />
+                            <TimePicker defaultValue={dayjs('13:30', format)} format={format} onChange={(time) => {
                                 const value = moment(time).toISOString();
-                                    console.log(value);
-                                    setData(prev => {
-                                        const newData = { ...prev };
-                                        newData.contents.startedActRoom = data.contents.startedActRoom.substr(0,10) + value.substr(10,14);
-                                        return newData;
-                                    })
-                                }} className="time-picker" />
+                                console.log(value);
+                                setData(prev => {
+                                    const newData = { ...prev };
+                                    newData.contents.startedActRoom = data.contents.startedActRoom.substr(0, 10) + value.substr(10, 14);
+                                    return newData;
+                                })
+                            }} className="time-picker" />
                         </div>
 
                         <div className='room-capacity'>
                             <i className="bi bi-people people-icon"></i>
                             <span>Room's Capacity</span>
                             <InputNumber min={3} max={12} defaultValue={3} onChange={(e) => {
-                                    const value = e;
-                                    console.log(value);
-                                    setData(prev => {
-                                        const newData = { ...prev };
-                                        newData.contents.capacity = value;
-                                        return newData;
-                                    })
-                                }}/>
+                                const value = e;
+                                console.log(value);
+                                setData(prev => {
+                                    const newData = { ...prev };
+                                    newData.contents.capacity = value;
+                                    return newData;
+                                })
+                            }} />
                         </div>
 
                         <div className='branch-selection'>
@@ -205,17 +233,17 @@ export default function NewEvent(props) {
                             }} />
                         </div>
 
-                        <button className='create-room-btn' onClick={() => { 
+                        <button className='create-room-btn' onClick={() => {
                             axios.post("//164.90.184.39:9999/activities", data)
-                            .then(response => {
-                                // console.log(response.data.contents.category_id);
-                                localStorage.setItem('activity_id',response.data._id)
-                                setTimeout(()=>{window.location = "/room";}, 3000);
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            })
-                            
+                                .then(response => {
+                                    // console.log(response.data.contents.category_id);
+                                    localStorage.setItem('activity_id', response.data._id)
+                                    setTimeout(() => { window.location = "/room"; }, 3000);
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                })
+
                         }}>Create Room</button>
 
                     </div>
@@ -223,14 +251,15 @@ export default function NewEvent(props) {
 
                 <div className='new-event-result-box'>
 
-                    <img src="src/assets/cardio-1.png" alt="" style={{display: data.contents.category_id === '638e675d4321c700312ff674' ? 'block' : 'none'}} />
-                    <img src="src/assets/people-running.png" alt="" style={{display: data.contents.category_id === '638e69544321c700312ff679' ? 'block' : 'none'}} />
-                    <img src="src/assets/yoga-room-pic.png" alt="" style={{display: data.contents.category_id === '638e69cd4321c700312ff67b' ? 'block' : 'none'}} />
-                    <img src="src/assets/people-yoga.png" alt="" style={{display: data.contents.category_id === '639f73052b33750031d145f9' ? 'block' : 'none'}} />
+                    <img src="src/assets/cardio-1.png" alt="" style={{ display: data.contents.category_id === '638e675d4321c700312ff674' ? 'block' : 'none' }} />
+                    <img src="src/assets/people-running.png" alt="" style={{ display: data.contents.category_id === '638e69544321c700312ff679' ? 'block' : 'none' }} />
+                    <img src="src/assets/yoga-room-pic.png" alt="" style={{ display: data.contents.category_id === '638e69cd4321c700312ff67b' ? 'block' : 'none' }} />
+                    <img src="src/assets/people-yoga.png" alt="" style={{ display: data.contents.category_id === '639f73052b33750031d145f9' ? 'block' : 'none' }} />
                     <div>
                         <p>{data.title}</p>
                         <p><i className="bi bi-geo-alt pin-icon white-icon"></i>{data.contents.location}</p>
-                        <p><i className="bi bi-clock clock-icon white-icon"></i>{data.contents.startedActRoom.substr(0,10)}</p>
+                        <p><i className="bi bi-clock clock-icon white-icon"></i>{data.contents.startedActRoom.substr(0, 10)}</p>
+
                     </div>
                 </div>
             </div>

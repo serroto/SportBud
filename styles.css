@@ -1060,6 +1060,12 @@ video{
     font-size: 15px;
 }
 
+.autocomplete-dropdown-container{
+    width: 220px;
+    border-radius: 5px;
+
+}
+
 /* Room Page CSS */
 .activity-room{
     background-color: #d7fd35;
