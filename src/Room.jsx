@@ -18,13 +18,19 @@ export default function Room() {
     let [data3, setData3] = useState([]);
 
     let [message, setMessage] = useState({
-        activity_id: localStorage.getItem('activity_id'),
-        profile_id: JSON.parse(localStorage.getItem('defines'))._id,
-        nickname: JSON.parse(localStorage.getItem('defines')).contents.nickname,
+        activity_id: localStorage.getItem('defines') === null ? "" : localStorage.getItem('activity_id'),
+        profile_id: localStorage.getItem('defines') === null ? "" : JSON.parse(localStorage.getItem('defines'))._id,
+        nickname: localStorage.getItem('defines') === null ? "" : JSON.parse(localStorage.getItem('defines')).contents.nickname,
         text: ""
     });
 
     useEffect(() => {
+
+                
+        if(localStorage.getItem('defines') === null ||  JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
+            window.location = "/login";
+        }
+
         // console.log(message)
         // console.log(JSON.parse(localStorage.getItem('defines')));
 
@@ -109,9 +115,8 @@ export default function Room() {
                                         console.log(Capa : {data2.capacity})
                                         <button className='mail-button' style={{
                                             display: (data2.clients_infos && (data2.clients_infos.length)+1 < data2.capacity)
-                                            // +1 ile odanın adminini ekliyorum
 
-                                                && JSON.parse(localStorage.getItem('defines'))._id === data2.admin_id
+                                                && JSON.parse(localStorage.getItem('defines'))._id != data2.admin_id
                                                 ? 'block' : 'none'
                                         }} onClick={() => {
                                             // console.log(request);
