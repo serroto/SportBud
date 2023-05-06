@@ -24,6 +24,10 @@ export default function Branch() {
     // const [category_id, setCategory_ID] = useState(0);
     useEffect(() => {
 
+        if(localStorage.getItem('defines') === null ||  JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
+            window.location = "/login";
+        }
+
         // console.log(localStorage.getItem('category_id'));
         let URL1 = "//164.90.184.39:9999/categories";
         axios
