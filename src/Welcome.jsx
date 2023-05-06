@@ -45,18 +45,15 @@ export default function Welcome() {
         let URL2 = "//164.90.184.39:9999/activities";
         axios
             .get(URL2)
-            .then(response => {
-                let list = search ? response.data.filter(item => item.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] && item.title.includes(address)) : response.data
-                // console.log(list)
-                setActivities(list)
-            })
+            .then(list =>
+                setActivities(list.data)
+                // let list = response.data.filter(item => item.contents.location.includes(address));
+            )
             .catch(function (error) {
                 console.log(error);
             })
 
         navigator.geolocation.getCurrentPosition(function (position) {
-            console.log("Latitude is :", position.coords.latitude);
-            console.log("Longitude is :", position.coords.longitude);
             defaultLocation = { lat: position.coords.latitude, lng: position.coords.longitude }
         });
 
@@ -103,7 +100,7 @@ export default function Welcome() {
                 <span className='nav-links'>
                     <Link to="/welcome">Home</Link>
                     <Link to="/profile">Profile</Link>
-                    <div className='logout' onClick={()=>{
+                    <div className='logout' onClick={() => {
                         localStorage.clear()
                         window.location = '/Login'
                     }}>Logout</div>
@@ -180,8 +177,8 @@ export default function Welcome() {
                     {
                         activities.map((x, y) =>
                             <div key={y}
-                            // Geçici kapatıldı:
-                            // style={{display:x.contents.startedActRoom.substr(0, 10) === startDate.toISOString().substr(0, 10) ? "block" : "none"}}
+                                // Geçici kapatıldı:
+                                style={{ display: x.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] && x.contents.location.includes(address) ? "block" : "none" }}
                             >
                                 <span className='branch-box-img' onClick={() => {
                                     localStorage.setItem('activity_id', x._id);
@@ -216,6 +213,11 @@ export default function Welcome() {
                                 icon={{
                                     url: renderSwitch(x.contents.category_id),
                                     scaledSize: new google.maps.Size(50, 50)
+                                }}
+                                title={x.title}
+                                onClick={() => {
+                                    localStorage.setItem('activity_id', x._id);
+                                    window.location = "/room";
                                 }}
                             />
                         </span>
