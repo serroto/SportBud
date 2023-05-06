@@ -16,6 +16,10 @@ export default function Profile() {
 
     useEffect(() => {
 
+        if(localStorage.getItem('defines') === null ||  JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
+            window.location = "/login";
+        }
+
         let loyalty = 0
         let fair_play = 0
         let performance = 0
@@ -24,21 +28,22 @@ export default function Profile() {
 
             profiles2.loyalty.forEach(item => {
 
-                loyalty = loyalty + item.score;
+                loyalty = loyalty + parseInt(item.score);
 
             })
 
             profiles2.fair_play.forEach(item => {
 
-                fair_play = fair_play + item.score;
+                fair_play = fair_play + parseInt(item.score);
 
             })
 
             profiles2.performance.forEach(item => {
-                performance = performance + item.score;
+                performance = performance + parseInt(item.score);
 
             })
 
+            console.log(loyalty)
             setScore(prev => {
                 const newScore = { ...prev };
                 newScore.loyalty = loyalty  / profiles2.loyalty.length;
@@ -116,9 +121,9 @@ export default function Profile() {
                     <img src="src/assets/people-running.png" alt="" />
                 </div>
                 <div className='ratings'>
-                    <span>Loyalty <br/>{score.loyalty}</span>
-                    <span>Fair Play<br/>{score.fair_play}</span>
-                    <span>Performance<br/>{score.performance}</span>
+                    <span>Loyalty <br/>{isNaN(score.loyalty) ?0:score.loyalty}</span>
+                    <span>Fair Play<br/>{isNaN(score.fair_play) ?0:score.fair_play}</span>
+                    <span>Performance<br/>{isNaN(score.performance) ?0:score.performance}</span>
                 </div>
                 <div className='events-created'>
                     <p>{successful.message}</p>

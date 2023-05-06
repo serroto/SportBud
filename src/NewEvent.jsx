@@ -2,20 +2,29 @@ import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment';
+import moment from "moment";
+import "moment-timezone";
 import dayjs from 'dayjs';
 
 import axios from 'axios';
 import { Input, Select, TimePicker, InputNumber } from 'antd';
 
-import PlacesAutocomplete,{
+import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
 } from 'react-places-autocomplete';
 
+moment.locale("tr"); // Türkiye saatine göre ayarlandı.
 
 export default function NewEvent(props) {
+    //console.log(moment(startDate).tz("Turkey").format('YYYY-MM-DD'));
 
+
+    const [startDate, setStartDate] = useState(new Date());
+
+    const [startTime, setTime] = useState(moment().tz("Turkey").format("HH:mm"));
+
+    
     const [address, setAdress] = useState("");
     const [coordinates, setCoordinates] = useState({
         lat: null,
@@ -32,7 +41,7 @@ export default function NewEvent(props) {
         data.contents.longitude = ll.lng;
     }
 
-          
+
     const [data, setData] = useState(
         {
             parent_id: "",
@@ -55,15 +64,16 @@ export default function NewEvent(props) {
                 short_description: "",
                 description: "",
                 clients_infos: [],
-                startedActRoom: moment().format(),
+                startedActRoom: moment().add(3, 'hours').toISOString(),
                 finishedActRoom: "2022-12-21"
             }
         }
     );
     const [categories, setCategories] = useState([]);
     useEffect(() => {
+
         let URL = "//164.90.184.39:9999/categories";
-        console.log(URL);
+        // console.log(URL); 
         axios
             .get(URL)
             .then(response => {
@@ -81,8 +91,26 @@ export default function NewEvent(props) {
             })
     }, [])
 
+    useEffect(()=>{
+//        2023-03-26T11:09:25.000Z
+ 
+
+
+setData(prev => {
+            const newData = { ...prev };
+            newData.contents.startedActRoom = startDate + startTime;
+            return newData;
+        })
+        // 2023-03-26T11:09:25.000Z
+
+        let tarih = new Date(startTime);
+console.log(tarih)
+        let formatliSaat = tarih.getHours().toString().padStart(2, "0") + ":" + tarih.getMinutes().toString().padStart(2, "0");
+        
+     //   console.log( moment(startDate).format('YYYY-MM-DD')+'T'+ formatliSaat + ':00.000Z');
+    },[startDate, startTime])
+
     const oldRoomPic = useRef();
-    const [startDate, setStartDate] = useState(new Date());
     const format = 'HH:mm';
 
     return (
@@ -121,7 +149,7 @@ export default function NewEvent(props) {
                                                 className: 'location-search-input',
                                             })}
                                         />
-                                        <div className="autocomplete-dropdown-container"> 
+                                        <div className="autocomplete-dropdown-container">
                                             {loading && <div>Loading...</div>}
                                             {suggestions.map((suggestion, y) => {
                                                 const className = suggestion.active
@@ -148,24 +176,15 @@ export default function NewEvent(props) {
                         </div>
                         <div className='date-filter-gray'>
                             <i className="bi bi-calendar-check calendar-icon"></i>
+
                             <DatePicker selected={startDate} onChange={(date) => {
-                                const value = moment(date).toISOString();
-                                console.log(value);
-                                setData(prev => {
-                                    const newData = { ...prev };
-                                    newData.contents.startedActRoom = value;
-                                    return newData;
-                                })
+                                setStartDate(date)                           
                             }} className="date-picker" />
-                            <TimePicker defaultValue={dayjs('13:30', format)} format={format} onChange={(time) => {
-                                const value = moment(time).toISOString();
-                                console.log(value);
-                                setData(prev => {
-                                    const newData = { ...prev };
-                                    newData.contents.startedActRoom = data.contents.startedActRoom.substr(0, 10) + value.substr(10, 14);
-                                    return newData;
-                                })
+
+                            <TimePicker defaultValue={dayjs(startTime, format)} format={format} onChange={(time) => {
+                                setTime(time)
                             }} className="time-picker" />
+
                         </div>
 
                         <div className='room-capacity'>

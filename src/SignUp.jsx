@@ -28,6 +28,9 @@ export default function SignUp() {
 
     }, [])
 
+
+ 
+
     const [profile, setProfile] = useState({
         parent_id: "",
         google_oauth2_id: "",
@@ -65,6 +68,14 @@ export default function SignUp() {
         event.preventDefault();
 
     }
+
+    useEffect(() => {
+        setProfile(prev => {
+            const newProfile = { ...prev };
+            newProfile.title = profile.contents.firstname +' '+ profile.contents.lastname ;
+            return newProfile;
+        })
+    },[profile])
 
     return (
 
@@ -183,10 +194,13 @@ export default function SignUp() {
                         </div>      </Col>
                     <Col span={4} offset={11} className="signup-bottom-text">
                         <Button className='create-room-btn' style={{ width: "85px", margin:"0px 0px"}} onClick={() => {
+                            localStorage.clear();
+
                             let URL = "//164.90.184.39:9999/profiles"
                             axios
                                 .post(URL, profile)
                                 .then(response => {
+
                                     window.location='/login'
                                     // console.log(response)
                                 })

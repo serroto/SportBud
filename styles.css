@@ -437,7 +437,6 @@ video{
 
 .carousel{
     margin: 35px;
-    margin-top: 60px;
     margin-bottom: 0px;
     float: left;
 }
@@ -1080,10 +1079,9 @@ video{
 }
 
 .room-info{
-    width: 450px;
-    height: 600px;
+    width: 600px;
     margin-left: 90px;
-    margin-top: 100px;
+    margin-top: 30px;
     font-weight: 500;
 }
 
@@ -1104,21 +1102,17 @@ video{
 }
 
 .room-info div:first-of-type{
-    width: 400px;
     margin: auto;
     text-align: center;
-    margin-top: 30px;
 }
 
 .room-info div:first-of-type p:first-of-type{
     font-weight: 650;
-    font-size: 16px;
+    font-size: 13px;
 }
 
 .room-info div:nth-child(2){
-    margin: 30px;
-    margin-top: 50px;
-    font-size: 12px;
+    font-size: 14px;
     color: #595959;
 }
 
@@ -1221,7 +1215,7 @@ video{
 /* Room chat CSS */
 .app{
     color:white;
-    top: 11%;
+    top: 25%;
     right: 6%;
     position: absolute;
     width: 100%;
