@@ -30,9 +30,10 @@ export default function Welcome() {
 
     useEffect(() => {
 
-        // if(JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
-        //     window.location = "/login";
-        // }
+        
+        if(localStorage.getItem('defines') === null ||  JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
+            window.location = "/login";
+        }
 
         let URL1 = "//164.90.184.39:9999/categories";
         axios
@@ -43,12 +44,25 @@ export default function Welcome() {
             })
 
         let URL2 = "//164.90.184.39:9999/activities";
+
         axios
             .get(URL2)
-            .then(list =>
-                setActivities(list.data)
-                // let list = response.data.filter(item => item.contents.location.includes(address));
-            )
+            .then(response => {
+
+                let list = search ? response.data.filter(
+                    item => (item.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] )
+                    && item.contents.location.includes(address))
+                    : response.data 
+                    setActivities(list)
+
+                // let list = search ? response.data.filter(item => item.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] ) : response.data
+                //  console.log(list)
+                 
+
+                // let list2 = search ?  item.contents.location.includes(address) : response.data
+                //  console.log(list)
+                // setActivities(list2)
+            })
             .catch(function (error) {
                 console.log(error);
             })
@@ -154,8 +168,10 @@ export default function Welcome() {
                         setSearch(1)
 
                     }} className="date-picker-yellow" />
-                    {/* <TimePicker placeholder='Time' format={format} onChange={(time) => {
-                        setTime(time);
+                    {/* <TimePicker placeholder='Time' format={format} onChange={(time)
+ => {
+                        setTime(time)
+;
                     }} className="time-picker-yellow" /> */}
                     <Input
                         value={address}
