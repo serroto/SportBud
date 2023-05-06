@@ -239,6 +239,11 @@ export default function Welcome() {
                                     url: renderSwitch(x.contents.category_id),
                                     scaledSize: new google.maps.Size(50, 50)
                                 }}
+                                title={x.title}
+                                onClick={() => {
+                                    localStorage.setItem('activity_id', x._id);
+                                    window.location = "/room";
+                                }}
                             />
                         </span>
                         )
