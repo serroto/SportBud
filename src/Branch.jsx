@@ -2,11 +2,14 @@ import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from "react";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { TimePicker, Input } from 'antd';
+import { Input } from 'antd';
 import axios from 'axios';
+import moment from "moment";
+import "moment-timezone";
 import { GoogleMap, Marker } from '@react-google-maps/api';
 const defaultLocation = { lat: 38.46498609609608, lng: 27.205795416060997 };
-
+import Defines from './context/defines';
+moment.locale("tr"); // Türkiye saatine göre ayarlandı.
 export default function Branch() {
 
     const [search, setSearch] = useState(0);
@@ -23,6 +26,11 @@ export default function Branch() {
 
     // const [category_id, setCategory_ID] = useState(0);
     useEffect(() => {
+        console.log(moment(startDate).tz("Turkey").format('YYYY-MM-DD'));
+
+        if(localStorage.getItem('defines') === null ||  JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
+            window.location = "/login";
+        }
 
         // console.log(localStorage.getItem('category_id'));
         let URL1 = "//164.90.184.39:9999/categories";
@@ -37,10 +45,18 @@ export default function Branch() {
             })
 
         let URL2 = "//164.90.184.39:9999/activities";
+
         axios
             .get(URL2)
             .then(response => {
-                let list = search ? response.data.filter(item => item.contents.category_id === localStorage.getItem('category_id') && item.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] && item.title.includes(address)) : response.data.filter(item => item.contents.category_id === localStorage.getItem('category_id'))
+                let list = search ?  response.data.filter(
+                    item => address === "" ? 
+                        item.contents.startedActRoom.substr(0, 10) === moment(startDate).tz("Turkey").format('YYYY-MM-DD') 
+            
+                        :  item.contents.location.toLowerCase().includes(address.toLowerCase())
+                    
+                    )
+                    : response.data.filter(item => item.contents.category_id === localStorage.getItem('category_id'))
                 // console.log(list)
                 setActivities(list)
             })

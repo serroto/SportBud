@@ -1,9 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Input } from 'antd';
+import { Input, Select, Space } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 
+
+const handleChange = (type, user_id, activity_id, score) => {
+
+    // console.log(`selected ${type}, ${user_id}, ${activity_id},${score}`);
+
+    let evaluation = {
+        loyalty: type === 'loyalty' ? [{"user_id" : JSON.parse(localStorage.getItem('defines'))._id, "activity_id" : activity_id, "score" : parseInt(score)}] : [],
+        fair_play: type === 'fair_play' ? [{"user_id" : JSON.parse(localStorage.getItem('defines'))._id, "activity_id" : activity_id, "score" : parseInt(score)}] : [],
+        performance: type === 'performance' ? [{"user_id" : JSON.parse(localStorage.getItem('defines'))._id, "activity_id" : activity_id, "score" : parseInt(score)}] : []
+    }
+
+    console.log(user_id);
+
+    let URL = "//164.90.184.39:9999/profiles/evaluations/" + user_id
+    
+    axios
+        .put(URL, evaluation)
+        .then(response => {
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    
+
+};
 
 
 export default function Room() {
@@ -25,6 +51,10 @@ export default function Room() {
     });
 
     useEffect(() => {
+
+        if(localStorage.getItem('defines') === null ||  JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
+            window.location = "/login";
+        }
         // console.log(message)
         // console.log(JSON.parse(localStorage.getItem('defines')));
 
@@ -83,35 +113,105 @@ export default function Room() {
             <div>
                 <div className='room-info'>
                     <div className='room-info-upper'>
-                        <p>{data1.title}</p>
+                        <p style = {{fontSize : '17px'}}>{data1.title}</p>
                         <p><i className="bi bi-geo-alt-fill white-icon"></i>{data2.location}</p>
-                        <p><i className="bi bi-clock-fill white-icon"></i> {moment(data2.startedActRoom).format('YYYY-MM-DD')}</p>
+                        <p><i className="bi bi-clock-fill white-icon"></i> {(data2.startedActRoom+"").substr(0,10) + " " + (data2.startedActRoom+"").substr(11,5)}</p>
                     </div>
                     <div className='room-info-bottom'>
-                        <p><b>{data2.slogan}</b></p>
-                        <p>ROOM ADMIN <span className='darker'>{data2.admin}</span></p>
-                        <p>THIS ROOM'S CAPACITY<span className='darker'>: {data2.capacity}</span></p>
+                        <p style = {{fontStyle : 'italic'}}><b>{data2.slogan}</b></p>
+                        <p>ROOM ADMIN <span className='darker'>: {data2.admin}</span></p>
+                        <p>THIS ROOM'S CAPACITY <span className='darker'>: {data2.capacity}</span></p>
                         <p>PARTICIPANTS</p>
-                        {data2.clients_infos && data2.clients_infos.map((x, y) => (
+                        {/* {data2.clients_infos && data2.clients_infos.map((x, y) => (
                             <p key={y}>{x.user_name}</p>
-                        ))}
+                        ))} */}
 
+                        {data2.clients_infos && data2.clients_infos.map((x, y) => (
+                        <div key={y}>
 
+                        <Space wrap style={{ flexWrap: 'no-wrap',   display: 'flex', marginBottom: '7px'}}>
+                           <p style = {{fontSize : '14px'}} key={y}>{x.user_name}</p>
+                            <Select
+                                defaultValue="0"
+                                style={{ width: 120 }}
+                                onChange={(score)=>{
+                                    
+                                    handleChange("fair_play", x.user_id, localStorage.getItem('activity_id'), score )
 
+                                }}
+                                options={[
+                                    { value: "0", label: "Fairplay" },
+                                    { value: "1", label: "1" },
+                                    { value: "2", label: "2" },
+                                    { value: "3", label: "3" },
+                                    { value: "4", label: "4" },
+                                    { value: "5", label: "5" },
+                                    { value: "6", label: "6" },
+                                    { value: "7", label: "7" },
+                                    { value: "8", label: "8" },
+                                    { value: "9", label: "9" },
+                                    { value: "10", label: "10" }
+                                ]}
+                            />
+                            <Select
+                                defaultValue="0"
+                                style={{ width: 120 }}
+                                onChange={(score)=>{
+                                    
+                                    handleChange("performance", x.user_id, localStorage.getItem('activity_id'), score )
 
+                                }}
+                                options={[
+                                    { value: "0", label: "Performance" },
+                                    { value: "1", label: "1" },
+                                    { value: "2", label: "2" },
+                                    { value: "3", label: "3" },
+                                    { value: "4", label: "4" },
+                                    { value: "5", label: "5" },
+                                    { value: "6", label: "6" },
+                                    { value: "7", label: "7" },
+                                    { value: "8", label: "8" },
+                                    { value: "9", label: "9" },
+                                    { value: "10", label: "10" }
+                                ]}
+                            />
+                            <Select
+                                defaultValue="0"
+                                style={{ width: 120 }}
+                                onChange={(score)=>{
+                                    
+                                    handleChange("loyalty", x.user_id, localStorage.getItem('activity_id'), score )
 
+                                }}
+                                options={[
+                                    { value: "0", label: "Loyalty" },
+                                    { value: "1", label: "1" },
+                                    { value: "2", label: "2" },
+                                    { value: "3", label: "3" },
+                                    { value: "4", label: "4" },
+                                    { value: "5", label: "5" },
+                                    { value: "6", label: "6" },
+                                    { value: "7", label: "7" },
+                                    { value: "8", label: "8" },
+                                    { value: "9", label: "9" },
+                                    { value: "10", label: "10" }
+                                ]}
+                            />
+                        </Space>
+                        </div>
+                         ))}
 
                         {data2.clients_infos && (
                             <div>
                                 {!(data2.clients_infos.find(i => i.user_id === JSON.parse(localStorage.getItem('defines'))._id)) && (
                                     <div>
-                                        console.log(Lenght : {data2.clients_infos.length})
-                                        console.log(Capa : {data2.capacity})
+                                        {/* console.log(Lenght : {data2.clients_infos.length})
+                                        console.log(Capa : {data2.capacity}) */}
                                         <button className='mail-button' style={{
-                                            display: (data2.clients_infos && (data2.clients_infos.length)+1 < data2.capacity)
-                                            // +1 ile odanın adminini ekliyorum
+                                            display: (data2.clients_infos && (data2.clients_infos.length) + 1 < data2.capacity)
+                                                // +1 ile odanın adminini ekliyorum
 
-                                                && JSON.parse(localStorage.getItem('defines'))._id === data2.admin_id
+                                                && JSON.parse(localStorage.getItem('defines'))._id != data2.admin_id
                                                 ? 'block' : 'none'
                                         }} onClick={() => {
                                             // console.log(request);

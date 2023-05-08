@@ -2,15 +2,17 @@ import { Link } from 'react-router-dom'
 import React, { useEffect, useState, useContext } from "react";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment';
-import dayjs from 'dayjs';
-import { Input, Select, TimePicker, InputNumber } from 'antd';
+import moment from "moment";
+import "moment-timezone";
+
+import { Input } from 'antd';
 import axios from 'axios';
 
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import Defines from './context/defines';
-let defaultLocation;
 
+moment.locale("tr"); // Türkiye saatine göre ayarlandı.
+let defaultLocation;
 export default function Welcome() {
     const [startDate, setStartDate] = useState(new Date());
     const [search, setSearch] = useState(0);
@@ -30,9 +32,12 @@ export default function Welcome() {
 
     useEffect(() => {
 
-        // if(JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
-        //     window.location = "/login";
-        // }
+        console.log(moment(startDate).tz("Turkey").format('YYYY-MM-DD'));
+
+        
+        if(localStorage.getItem('defines') === null ||  JSON.parse(localStorage.getItem('defines'))['deleted'] != 0){
+            window.location = "/login";
+        }
 
         let URL1 = "//164.90.184.39:9999/categories";
         axios
@@ -43,24 +48,31 @@ export default function Welcome() {
             })
 
         let URL2 = "//164.90.184.39:9999/activities";
+
         axios
             .get(URL2)
             .then(response => {
-                let list = search ? response.data.filter(item => item.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] && item.title.includes(address)) : response.data
-                // console.log(list)
-                setActivities(list)
+
+                let list = search ? response.data.filter(
+                    item => address === "" ? 
+                        item.contents.startedActRoom.substr(0, 10) === moment(startDate).tz("Turkey").format('YYYY-MM-DD') 
+            
+                        :  item.contents.location.toLowerCase().includes(address.toLowerCase())
+                    
+                    )
+                    : response.data 
+                    setActivities(list)
             })
             .catch(function (error) {
                 console.log(error);
             })
 
         navigator.geolocation.getCurrentPosition(function (position) {
-            console.log("Latitude is :", position.coords.latitude);
-            console.log("Longitude is :", position.coords.longitude);
+            //console.log("Latitude is :", position.coords.latitude);
+            //console.log("Longitude is :", position.coords.longitude);
             defaultLocation = { lat: position.coords.latitude, lng: position.coords.longitude }
         });
 
-        // setUser(JSON.parse(localStorage.getItem('defines')))
     }, [startDate, address, time])
 
 
@@ -157,8 +169,10 @@ export default function Welcome() {
                         setSearch(1)
 
                     }} className="date-picker-yellow" />
-                    {/* <TimePicker placeholder='Time' format={format} onChange={(time) => {
-                        setTime(time);
+                    {/* <TimePicker placeholder='Time' format={format} onChange={(time)
+ => {
+                        setTime(time)
+;
                     }} className="time-picker-yellow" /> */}
                     <Input
                         value={address}
@@ -180,8 +194,7 @@ export default function Welcome() {
                     {
                         activities.map((x, y) =>
                             <div key={y}
-                            // Geçici kapatıldı:
-                            // style={{display:x.contents.startedActRoom.substr(0, 10) === startDate.toISOString().substr(0, 10) ? "block" : "none"}}
+                         
                             >
                                 <span className='branch-box-img' onClick={() => {
                                     localStorage.setItem('activity_id', x._id);
@@ -216,6 +229,11 @@ export default function Welcome() {
                                 icon={{
                                     url: renderSwitch(x.contents.category_id),
                                     scaledSize: new google.maps.Size(50, 50)
+                                }}
+                                title={x.title}
+                                onClick={() => {
+                                    localStorage.setItem('activity_id', x._id);
+                                    window.location = "/room";
                                 }}
                             />
                         </span>
