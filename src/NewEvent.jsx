@@ -1,13 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
-import "moment-timezone";
+import { Input, Select, DatePicker, Space, InputNumber, ConfigProvider } from 'antd';
+
+// The default locale is en-US, if you want to use other locale, just set locale in entry file globally.
 import dayjs from 'dayjs';
+import 'dayjs/locale/tr';
+import locale from 'antd/locale/tr_TR';
 
 import axios from 'axios';
-import { Input, Select, TimePicker, InputNumber } from 'antd';
+import moment from "moment";
+import "moment-timezone";
+
 
 import PlacesAutocomplete, {
     geocodeByAddress,
@@ -17,19 +20,18 @@ import PlacesAutocomplete, {
 moment.locale("tr"); // Türkiye saatine göre ayarlandı.
 
 export default function NewEvent(props) {
-    //console.log(moment(startDate).tz("Turkey").format('YYYY-MM-DD'));
-
 
     const [startDate, setStartDate] = useState(new Date());
 
-    const [startTime, setTime] = useState(moment().tz("Turkey").format("HH:mm"));
 
-    
+
     const [address, setAdress] = useState("");
+
     const [coordinates, setCoordinates] = useState({
         lat: null,
         lng: null
     });
+
     const handleSelect = async value => {
         const results = await geocodeByAddress(value);
         const ll = await getLatLng(results[0]);
@@ -64,12 +66,14 @@ export default function NewEvent(props) {
                 short_description: "",
                 description: "",
                 clients_infos: [],
-                startedActRoom: moment().add(3, 'hours').toISOString(),
-                finishedActRoom: "2022-12-21"
+                startedActRoom: "",
+                finishedActRoom: ""
             }
         }
     );
+
     const [categories, setCategories] = useState([]);
+
     useEffect(() => {
 
         let URL = "//164.90.184.39:9999/categories";
@@ -89,29 +93,34 @@ export default function NewEvent(props) {
             .catch(function (error) {
                 console.log(error);
             })
-    }, [])
 
-    useEffect(()=>{
-//        2023-03-26T11:09:25.000Z
- 
+        //console.log(moment().tz("Turkey").format("YYYY-MM-DD HH:mm"))
 
 
-setData(prev => {
-            const newData = { ...prev };
-            newData.contents.startedActRoom = startDate + startTime;
-            return newData;
-        })
+
         // 2023-03-26T11:09:25.000Z
 
-        let tarih = new Date(startTime);
-console.log(tarih)
-        let formatliSaat = tarih.getHours().toString().padStart(2, "0") + ":" + tarih.getMinutes().toString().padStart(2, "0");
-        
-     //   console.log( moment(startDate).format('YYYY-MM-DD')+'T'+ formatliSaat + ':00.000Z');
-    },[startDate, startTime])
 
-    const oldRoomPic = useRef();
-    const format = 'HH:mm';
+
+    }, [])
+
+
+
+    const activityDateTime = (value) => {
+
+        const dateObject = new Date(value); // tarih/saat değerini Date nesnesine çevirir
+        const tzOffset = 180;
+        const utcDate = new Date(dateObject.getTime() + (tzOffset * 60 * 1000)); // yerel saat dilimini UTC saat dilimine çevirir
+        const isoString = utcDate.toISOString(); // UTC formatında tarih/saat değerini elde eder
+
+        console.log('onOk: ', isoString);
+
+        setData(prev => {
+            const newData = { ...prev };
+            newData.contents.startedActRoom = isoString;
+            return newData;
+        })
+    };
 
     return (
         <div className="create-new-event">
@@ -174,18 +183,29 @@ console.log(tarih)
                                 )}
                             </PlacesAutocomplete>
                         </div>
+
+
+
                         <div className='date-filter-gray'>
                             <i className="bi bi-calendar-check calendar-icon"></i>
-
-                            <DatePicker selected={startDate} onChange={(date) => {
-                                setStartDate(date)                           
-                            }} className="date-picker" />
-
-                            <TimePicker defaultValue={dayjs(startTime, format)} format={format} onChange={(time) => {
-                                setTime(time)
-                            }} className="time-picker" />
+                            <Space direction="vertical" size={12}>
+                                <ConfigProvider locale={locale}>
+                                    <DatePicker
+                                        showTime={{
+                                            format: 'HH:mm',
+                                        }}
+                                        format="YYYY-MM-DD HH:mm"
+                                        onOk={activityDateTime}
+                                        onChange={activityDateTime}
+                                    />
+                                </ConfigProvider>
+                            </Space>
 
                         </div>
+
+
+
+
 
                         <div className='room-capacity'>
                             <i className="bi bi-people people-icon"></i>
@@ -278,6 +298,7 @@ console.log(tarih)
                         <p>{data.title}</p>
                         <p><i className="bi bi-geo-alt pin-icon white-icon"></i>{data.contents.location}</p>
                         <p><i className="bi bi-clock clock-icon white-icon"></i>{data.contents.startedActRoom.substr(0, 10)}</p>
+                        <p>{data.contents.startedActRoom.substr(11,5)}</p>
 
                     </div>
                 </div>

@@ -62,14 +62,6 @@ export default function Welcome() {
                     )
                     : response.data 
                     setActivities(list)
-
-                // let list = search ? response.data.filter(item => item.contents.startedActRoom.substr(0, 10) === startDate.toISOString().split("T")[0] ) : response.data
-                //  console.log(list)
-                 
-
-                // let list2 = search ?  item.contents.location.includes(address) : response.data
-                //  console.log(list)
-                // setActivities(list2)
             })
             .catch(function (error) {
                 console.log(error);
@@ -202,8 +194,7 @@ export default function Welcome() {
                     {
                         activities.map((x, y) =>
                             <div key={y}
-                            // Geçici kapatıldı:
-                            // style={{display:x.contents.startedActRoom.substr(0, 10) === startDate.toISOString().substr(0, 10) ? "block" : "none"}}
+                         
                             >
                                 <span className='branch-box-img' onClick={() => {
                                     localStorage.setItem('activity_id', x._id);

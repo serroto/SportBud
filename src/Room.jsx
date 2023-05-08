@@ -115,7 +115,7 @@ export default function Room() {
                     <div className='room-info-upper'>
                         <p style = {{fontSize : '17px'}}>{data1.title}</p>
                         <p><i className="bi bi-geo-alt-fill white-icon"></i>{data2.location}</p>
-                        <p><i className="bi bi-clock-fill white-icon"></i> {moment(data2.startedActRoom).format('YYYY-MM-DD')}</p>
+                        <p><i className="bi bi-clock-fill white-icon"></i> {data2.startedActRoom}</p>
                     </div>
                     <div className='room-info-bottom'>
                         <p style = {{fontStyle : 'italic'}}><b>{data2.slogan}</b></p>
