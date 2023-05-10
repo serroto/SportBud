@@ -53,7 +53,8 @@ export default function NewEvent(props) {
             title: "Activity Name",
             contents: {
                 category_id: "638e675d4321c700312ff674",
-                admin_id: "63979d62e86bed0031cecaf3",
+                category_name: "Cardio",
+                admin_id: JSON.parse(localStorage.getItem('defines'))._id,
                 admin: JSON.parse(localStorage.getItem('defines')).contents.nickname,
                 location: address,
                 latitude: coordinates.lat,
@@ -65,7 +66,9 @@ export default function NewEvent(props) {
                 slogan: "",
                 short_description: "",
                 description: "",
-                clients_infos: [],
+                clients_infos: [
+
+                ],
                 startedActRoom: "",
                 finishedActRoom: ""
             }
@@ -94,15 +97,21 @@ export default function NewEvent(props) {
                 console.log(error);
             })
 
-        //console.log(moment().tz("Turkey").format("YYYY-MM-DD HH:mm"))
-
-
-
-        // 2023-03-26T11:09:25.000Z
-
-
-
     }, [])
+
+    useEffect(()=>{
+        setData(prev => {
+            const newData = { ...prev };
+            newData.contents.clients_infos = [
+                {
+                    "user_id": JSON.parse(localStorage.getItem('defines'))._id ,
+                    "user_name": JSON.parse(localStorage.getItem('defines')).contents.nickname ,
+                    "registeredAt": data.contents.startedActRoom
+                }
+            ];
+            return newData;
+        })
+    },[data.contents.startedActRoom])
 
 
 
@@ -210,7 +219,7 @@ export default function NewEvent(props) {
                         <div className='room-capacity'>
                             <i className="bi bi-people people-icon"></i>
                             <span>Room's Capacity</span>
-                            <InputNumber min={3} max={12} defaultValue={3} onChange={(e) => {
+                            <InputNumber min={data.contents.min_client} max={data.contents.max_client} defaultValue={data.contents.min_client} onChange={(e) => {
                                 const value = e;
                                 console.log(value);
                                 setData(prev => {
@@ -227,8 +236,8 @@ export default function NewEvent(props) {
                             <Select
                                 labelInValue
                                 defaultValue={{
-                                    value: '638e675d4321c700312ff674',
-                                    label: 'Cardio',
+                                    value: data.contents.category_id,
+                                    label: data.contents.category_name,
                                 }}
                                 style={{
                                     width: 120,
