@@ -165,7 +165,7 @@ export default function SignUp() {
                                 })
 
                             }} />
-                            <Select  className='form-control-2' style={{ width: "100%" ,height:"35px", color:"#000000"}}
+                            <Select  className='form-control-2' style={{height:"35px", color:"#000000"}}
                                 mode="multiple"
                                 allowClear
                                 placeholder="Favorite Branches"

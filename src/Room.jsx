@@ -151,8 +151,6 @@ export default function Room() {
                         {data2.clients_infos && data2.clients_infos.map((x, y) => (
 
                             <div key={y}>
-                            
-                                
                                 <Space wrap style={{ flexWrap: 'no-wrap', display: 'flex', marginBottom: '7px' }}>
                                     <p style={{ fontSize: '14px' }} key={y}>{x.user_name}</p>
                                     <Select
@@ -236,7 +234,6 @@ export default function Room() {
                                         console.log(Capa : {data2.capacity}) */}
                                         <button className='mail-button' style={{
                                             display: (data2.clients_infos && (data2.clients_infos.length) < data2.capacity)
-                                                // +1 ile odanın adminini ekliyorum
 
                                                 && JSON.parse(localStorage.getItem('defines'))._id != data2.admin_id
                                                 ? 'block' : 'none'

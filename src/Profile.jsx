@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { Image } from 'antd';
+
 import axios from 'axios';
 
 export default function Profile() {
@@ -117,8 +119,16 @@ export default function Profile() {
                 </div>
                 <div className='fav-branches'>
                     <h6 className='fav-branches-title'>FAVORITE BRANCHES</h6>
-                    <img src="src/assets/people-yoga.png" alt="" />
-                    <img src="src/assets/people-running.png" alt="" />
+                    {profiles2.favorite_branches && profiles2.favorite_branches.map((x,y)=><div style={{ float: "left" }} key={y}> 
+                    <img src="src/assets/cardio-1.png" alt="" style={{display: x === '638e675d4321c700312ff674' ? 'block' : 'none' }} />
+                    <img src="src/assets/people-running.png" alt="" style={{ display: x === '638e69544321c700312ff679' ? 'block' : 'none' }} />
+                    <img src="src/assets/yoga-room-pic.png" alt="" style={{ display: x === '638e69cd4321c700312ff67b' ? 'block' : 'none' }} />
+                    <img src="src/assets/people-yoga.png" alt="" style={{ display: x === '639f73052b33750031d145f9' ? 'block' : 'none' }} />
+                    </div>)}
+
+
+                    {/* <img src="src/assets/people-yoga.png" alt="" />
+                    <img src="src/assets/people-running.png" alt="" /> */}
                 </div>
                 <div className='ratings'>
                     <span>Loyalty <br/>{isNaN(score.loyalty) ?0:score.loyalty}</span>
