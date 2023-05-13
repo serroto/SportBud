@@ -16,7 +16,7 @@ export default function Branch() {
     const [time, setTime] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const format = 'HH:mm';
-    const [address, setAdress] = useState();
+    const [address, setAdress] = useState("");
 
 
     const [activities, setActivities] = useState([]);
