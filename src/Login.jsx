@@ -1,28 +1,15 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, {useState } from "react";
 import { Link } from 'react-router-dom';
 import { Space, Input, Button, Row, Col } from 'antd';
 import axios from 'axios';
 import videoBg from './assets/running_video.mp4';
-import Defines from "./context/defines";
 
 
 export default function Login() {
-    const { defines, setDefines } = useContext(Defines);
-
-
     const [login, setLogin] = useState({
         email: "",
         password: ""
     });
-
-    useEffect(()=>{
-
-         if(localStorage.getItem('defines') != null && JSON.parse(localStorage.getItem('defines'))['deleted'] != null && JSON.parse(localStorage.getItem('defines'))['deleted'] === 0){
-                window.location = "/welcome";
-            }
-         
-
-    })
 
     return (
 
@@ -31,7 +18,8 @@ export default function Login() {
 
             <div className="login-content">
                 <nav className='login-nav'>
-                    <Link to="/"><img src="src/assets/logo.png" alt="logo" className='logo' /></Link>
+                 <Link to="/"><img src="src/assets/logo.png" alt="logo" className='logo' /></Link> 
+                
                 </nav>
                 <br />
                 <br />
