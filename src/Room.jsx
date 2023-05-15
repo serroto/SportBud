@@ -228,7 +228,7 @@ export default function Room() {
 
                         {data2.clients_infos && (
                             <div>
-                                {!(data2.clients_infos.find(i => i.user_id === JSON.parse(localStorage.getItem('defines'))._id)) && (
+                                {!(data2.clients_infos.find(i => i.user_id === JSON.parse(localStorage.getItem('defines'))._id)) && data2.admin_id !== JSON.parse(localStorage.getItem('defines'))._id  && (
                                     <div>
                                         {/* console.log(Lenght : {data2.clients_infos.length})
                                         console.log(Capa : {data2.capacity}) */}
@@ -267,7 +267,7 @@ export default function Room() {
 
                         {data2.clients_infos && (
                             <div>
-                                {(data2.clients_infos.find(i => i.user_id === JSON.parse(localStorage.getItem('defines'))._id)) && (
+                                {(data2.clients_infos.find(i => i.user_id === JSON.parse(localStorage.getItem('defines'))._id)) && data2.admin_id !== JSON.parse(localStorage.getItem('defines'))._id  && (
                                     <div>
 
                                         <button className='mail-button' style={{
