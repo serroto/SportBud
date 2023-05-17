@@ -169,6 +169,8 @@ export default function Branch() {
                     {
                         activities.map((x, y) =>
                             <div key={y}
+                                style={{ display: x.contents.startedActRoom.substr(0, 10) >= moment().format('YYYY-MM-DD')  ? 'block' :'none' }}
+
                             // Geçici kapatıldı:
                             // style={{display:x.contents.startedActRoom.substr(0, 10) === startDate.toISOString().substr(0, 10) ? "block" : "none"}}
                             >

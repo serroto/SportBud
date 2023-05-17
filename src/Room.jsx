@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Input, Select, Space } from 'antd';
 import axios from 'axios';
+import moment from 'moment';
 
 
 const handleChange = (type, user_id, activity_id, score) => {
@@ -73,6 +74,7 @@ export default function Room() {
     });
 
     useEffect(() => {
+        // console.log(moment().format('YYYY-MM-DD')+' 23:59' )
 
         if (localStorage.getItem('defines') === null || JSON.parse(localStorage.getItem('defines'))['deleted'] != 0) {
             window.location = "/login";
@@ -156,7 +158,8 @@ export default function Room() {
                                     <Select
                                        // disabled={checkPoint("fair_play", JSON.parse(localStorage.getItem('defines'))._id, localStorage.getItem('activity_id'), x.user_id) ? true:false}
                                         defaultValue="0"
-                                        style={{ width: 120 }}
+                                        style={{ width: 120, display: moment(data2.startedActRoom).add(1, 'hours').toISOString() < moment().add(3,'hours').toISOString() && moment(data2.startedActRoom).add(1, 'hours').toISOString() < moment().set({ hour: 23, minute: 59, second: 0, millisecond: 0 }).add(3,'hours').toISOString() ? 'block' :'none' }}
+
                                         onChange={(score) => {
 
                                             handleChange("fair_play", x.user_id, localStorage.getItem('activity_id'), score)
@@ -179,7 +182,8 @@ export default function Room() {
                                     <Select
                                         // disabled={checkPoint("performance", JSON.parse(localStorage.getItem('defines'))._id, localStorage.getItem('activity_id'), x.user_id)}
                                         defaultValue="0"
-                                        style={{ width: 120 }}
+                                        style={{ width: 120, display: moment(data2.startedActRoom).add(1, 'hours').toISOString() < moment().add(3,'hours').toISOString() && moment(data2.startedActRoom).add(1, 'hours').toISOString() < moment().set({ hour: 23, minute: 59, second: 0, millisecond: 0 }).add(3,'hours').toISOString() ? 'block' :'none' }}
+                                    
                                         onChange={(score) => {
 
                                             handleChange("performance", x.user_id, localStorage.getItem('activity_id'), score)
@@ -202,7 +206,8 @@ export default function Room() {
                                     <Select
                                         // disabled={checkPoint("loyalty", JSON.parse(localStorage.getItem('defines'))._id, localStorage.getItem('activity_id'), x.user_id)}
                                         defaultValue="0"
-                                        style={{ width: 120 }}
+                                        style={{ width: 120, display: moment(data2.startedActRoom).add(1, 'hours').toISOString() < moment().add(3,'hours').toISOString() && moment(data2.startedActRoom).add(1, 'hours').toISOString() < moment().set({ hour: 23, minute: 59, second: 0, millisecond: 0 }).add(3,'hours').toISOString() ? 'block' :'none' }}
+                                        
                                         onChange={(score) => {
 
                                             handleChange("loyalty", x.user_id, localStorage.getItem('activity_id'), score)
@@ -247,7 +252,7 @@ export default function Room() {
                                                 .put(URL, {
                                                     operation: "update",
                                                     user_id: JSON.parse(localStorage.getItem("defines"))._id,
-                                                    user_name: JSON.parse(localStorage.getItem("defines")).contents.firstname + " " + JSON.parse(localStorage.getItem("defines")).contents.lastname
+                                                    user_name: JSON.parse(localStorage.getItem("defines")).contents.nickname
 
                                                 })
                                                 .then(response => {
@@ -349,7 +354,11 @@ export default function Room() {
 
 
                         </div>
-                        <div className="typebox">
+                        <div className="typebox" 
+                        
+                        style={{ display: data2.clients_infos && data2.clients_infos.some(item => item.user_id === JSON.parse(localStorage.getItem('defines'))._id)  ? 'block' :'none' }}
+                        
+                        >
                             <Input type="text" className="message-input" onChange={e => {
                                 let value = e.target.value
                                 setMessage(prev => {

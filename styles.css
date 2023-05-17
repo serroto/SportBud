@@ -1124,6 +1124,9 @@ video{
     margin: auto;
     text-align: center;
 }
+.room-info div:first-of-type :first-child{
+    margin: 1px;
+}
 
 .room-info div:first-of-type p:first-of-type{
     font-weight: 650;
@@ -1367,6 +1370,7 @@ video{
     flex:1;
     height:50px;
     font-size:18px;
+    width: 480px;
 }
 .chat-screen .typebox button{
     width: 80px;

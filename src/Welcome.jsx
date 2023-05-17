@@ -194,7 +194,8 @@ export default function Welcome() {
                     {
                         activities.map((x, y) =>
                             <div key={y}
-                         
+
+                            style={{ display: x.contents.startedActRoom.substr(0, 10) >= moment().format('YYYY-MM-DD')  ? 'block' :'none' }}
                             >
                                 <span className='branch-box-img' onClick={() => {
                                     localStorage.setItem('activity_id', x._id);
